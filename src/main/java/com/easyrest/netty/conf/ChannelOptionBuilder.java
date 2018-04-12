@@ -8,7 +8,6 @@ import io.netty.channel.ChannelOption;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.netty.channel.ChannelOption.*;
 
 /**
  * The connect option setting.
@@ -41,18 +40,18 @@ public class ChannelOptionBuilder {
     }
 
     public ChannelOptionBuilder buildWithDefaultOptions(){
-        options.put(SO_KEEPALIVE, soKeepAlive);
-        options.put(SO_BACKLOG, soBackLog);
-        options.put(TCP_NODELAY, tcpNoDelay);
-        options.put(SO_REUSEADDR, soReuseAddr);
-        options.put(SO_LINGER, soLinger);
-        options.put(CONNECT_TIMEOUT_MILLIS, connectTimeOutMillis);
-        options.put(SO_RCVBUF, soRcvBuf);
+        options.put(ChannelOption.SO_KEEPALIVE, soKeepAlive);
+        options.put(ChannelOption.SO_BACKLOG, soBackLog);
+        options.put(ChannelOption.TCP_NODELAY, tcpNoDelay);
+        options.put(ChannelOption.SO_REUSEADDR, soReuseAddr);
+        options.put(ChannelOption.SO_LINGER, soLinger);
+        options.put(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeOutMillis);
+        options.put(ChannelOption.SO_RCVBUF, soRcvBuf);
 
         //For child
-        childOptions.put(ALLOCATOR, allocator);
-        childOptions.put(SO_RCVBUF, soRcvBuf);
-        childOptions.put(SO_REUSEADDR, soReuseAddr);
+        childOptions.put(ChannelOption.ALLOCATOR, allocator);
+        childOptions.put(ChannelOption.SO_RCVBUF, soRcvBuf);
+        childOptions.put(ChannelOption.SO_REUSEADDR, soReuseAddr);
         return this;
     }
 
