@@ -2,6 +2,7 @@ package com.easyrest;
 
 import com.easyrest.controller.EasyRestController;
 import com.easyrest.netty.exception.ConfigurationException;
+import com.easyrest.utils.LogUtils;
 import io.netty.bootstrap.ServerBootstrap;
 
 import java.util.HashMap;
@@ -13,14 +14,14 @@ public class EasyRest {
     private Map<List<String>, EasyRestController> restControllerMap = new HashMap<>();
 
     public void startServer(){
-        NettyInit defaultNetty = new NettyInit();
-        defaultNetty.bindChannelFuture(defaultNetty.build().bind(defaultNetty.getPort()));
+        startServer(NettyInit.SystemName, new NettyInit());
     }
 
     public void startServer(String SystemName, NettyInit nettyInit){
         if (nettyInit == null){
             throw new ConfigurationException(String.format("%s can not be null.", NettyInit.class.getName()));
         }
+        LogUtils.info(String.format("%s is running.", SystemName));
         ServerBootstrap bootstrap = nettyInit.build(SystemName);
         nettyInit.bindChannelFuture(bootstrap.bind(nettyInit.getPort()));
     }

@@ -2,8 +2,7 @@ package com.easyrest;
 
 import com.easyrest.netty.conf.ChannelOptionBuilder;
 import com.easyrest.netty.core.api.BaseConfiguration;
-import com.easyrest.netty.core.pipeline.DataProcessHandler;
-import com.easyrest.netty.core.pipeline.RequestProcessHandler;
+import com.easyrest.netty.core.pipeline.in.RequestProcessHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
@@ -12,7 +11,10 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.HttpContentDecompressor;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import org.slf4j.Logger;
@@ -30,8 +32,8 @@ import java.util.function.Function;
 public class NettyInit implements BaseConfiguration {
 
     private int port = 8080;
-    private int ioExecutors;
-    private String SystemName;
+    private int ioExecutors = Runtime.getRuntime().availableProcessors() * 2;
+    public static String SystemName = "EasyRest";
     private int maxContentLength = 20480;
     private EventLoopGroup bossEventLoopGroup;
     private EventLoopGroup workerEventLoopGroup;
@@ -43,25 +45,24 @@ public class NettyInit implements BaseConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyInit.class);
 
     public ServerBootstrap build(){
-        return build("EasyRest");
+        return build(SystemName);
     }
 
-    public ServerBootstrap build(String SystemName){
-        this.SystemName = SystemName;
+    public ServerBootstrap build(String _systemName){
+        SystemName = _systemName;
         if (Epoll.isAvailable()){
-            bossEventLoopGroup = new EpollEventLoopGroup();
-            workerEventLoopGroup = new EpollEventLoopGroup();
+            bossEventLoopGroup = new EpollEventLoopGroup(ioExecutors);
+            workerEventLoopGroup = new EpollEventLoopGroup(ioExecutors);
         } else {
-            bossEventLoopGroup = new NioEventLoopGroup();
-            workerEventLoopGroup = new NioEventLoopGroup();
+            bossEventLoopGroup = new NioEventLoopGroup(ioExecutors);
+            workerEventLoopGroup = new NioEventLoopGroup(ioExecutors);
         }
         return initServerBootstrap();
     }
 
     private ServerBootstrap initServerBootstrap() {
         ServerBootstrap bootstrap = new ServerBootstrap().group(bossEventLoopGroup, workerEventLoopGroup).channel(Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
-        addCustomizeHandle(new RequestProcessHandler());
-        addCustomizeHandle(new DataProcessHandler(this, new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK)));
+        addCustomizeHandle(new RequestProcessHandler(this));
         customizeChannel.setChannelHandlerToServerBootstrap(bootstrap);
         channelOptionBuilder.build(bootstrap);
         return bootstrap;
@@ -70,6 +71,15 @@ public class NettyInit implements BaseConfiguration {
     public NettyInit setPort(int port){
         if (port > 0 || port <= PortConfig.getUpper()){
             this.port = port;
+        }
+        return this;
+    }
+
+    public NettyInit setIoExecutors(int ioExecutors){
+        if (ioExecutors < 1) {
+            this.ioExecutors = Runtime.getRuntime().availableProcessors() * 2;
+        } else {
+            this.ioExecutors = ioExecutors;
         }
         return this;
     }
@@ -179,11 +189,11 @@ public class NettyInit implements BaseConfiguration {
             // Inbound handlers
             pipeline.addLast("decoder", new HttpRequestDecoder());
             pipeline.addLast("inflater", new HttpContentDecompressor());
+            pipeline.addLast("aggregator", new HttpObjectAggregator(maxContentLength));
 
             // Outbound handlers
             pipeline.addLast("encoder", new HttpResponseEncoder());
             pipeline.addLast("chunkWriter", new ChunkedWriteHandler());
-            pipeline.addLast("aggregator", new HttpObjectAggregator(maxContentLength));
 
             //register customize handlers
             registerUserHandlers(pipeline);

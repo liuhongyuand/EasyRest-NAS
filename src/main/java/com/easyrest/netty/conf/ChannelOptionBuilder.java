@@ -40,15 +40,14 @@ public class ChannelOptionBuilder {
     }
 
     public ChannelOptionBuilder buildWithDefaultOptions(){
-        options.put(ChannelOption.SO_KEEPALIVE, soKeepAlive);
         options.put(ChannelOption.SO_BACKLOG, soBackLog);
-        options.put(ChannelOption.TCP_NODELAY, tcpNoDelay);
         options.put(ChannelOption.SO_REUSEADDR, soReuseAddr);
-        options.put(ChannelOption.SO_LINGER, soLinger);
         options.put(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeOutMillis);
-        options.put(ChannelOption.SO_RCVBUF, soRcvBuf);
 
         //For child
+        childOptions.put(ChannelOption.SO_KEEPALIVE, soKeepAlive);
+        childOptions.put(ChannelOption.SO_LINGER, soLinger);
+        childOptions.put(ChannelOption.TCP_NODELAY, tcpNoDelay);
         childOptions.put(ChannelOption.ALLOCATOR, allocator);
         childOptions.put(ChannelOption.SO_RCVBUF, soRcvBuf);
         childOptions.put(ChannelOption.SO_REUSEADDR, soReuseAddr);
