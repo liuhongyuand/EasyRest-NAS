@@ -1,7 +1,6 @@
 package com.easyrest.model.request;
 
 
-import com.easyrest.EasyRest;
 import com.easyrest.annotations.parameter.AllDefined;
 import com.easyrest.annotations.parameter.NotNull;
 import com.easyrest.annotations.parameter.Optional;
@@ -15,10 +14,6 @@ import java.lang.reflect.Field;
  * Created by liuhongyu.louie on 2016/9/30.
  */
 public abstract class AbstractRequestModel implements RequestModel {
-
-    public void initRequestModel(){
-        EasyRest.register(this);
-    }
 
     @Override
     public boolean notNullFieldCheck(){

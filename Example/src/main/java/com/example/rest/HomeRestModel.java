@@ -11,7 +11,7 @@ import java.util.List;
 public class HomeRestModel extends AbstractRequestModel {
 
     @Post("/getEmployeeList")
-    public Object putList(List<Integer> list, String name){
+    public Class putList(List<Integer> list, String name){
         return HomeController.class;
     }
 

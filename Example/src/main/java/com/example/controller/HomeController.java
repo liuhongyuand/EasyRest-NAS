@@ -10,6 +10,7 @@ public class HomeController implements EasyRestController {
 
     @Override
     public ResponseEntity doProcess(HttpEntity httpEntity) {
+        System.out.println("!!!!");
         return ResponseEntity.buildOkResponse("It Works!");
     }
 }
