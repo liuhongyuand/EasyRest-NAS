@@ -1,3 +1,3 @@
-# EasyRestNetty
+# EasyRest-NS
 
-EasyRest for netty
+EasyRest with Netty and Spring.
