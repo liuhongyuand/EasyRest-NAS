@@ -1,6 +1,7 @@
 package com.easyrest;
 
 import com.easyrest.controller.EasyRestController;
+import com.easyrest.model.request.RequestModel;
 import com.easyrest.netty.exception.ConfigurationException;
 import com.easyrest.utils.LogUtils;
 import io.netty.bootstrap.ServerBootstrap;
@@ -12,6 +13,11 @@ import java.util.Map;
 public class EasyRest {
 
     private Map<List<String>, EasyRestController> restControllerMap = new HashMap<>();
+
+
+    public static void register(RequestModel requestModel){
+
+    }
 
     public void startServer(){
         startServer(NettyInit.SystemName, new NettyInit());

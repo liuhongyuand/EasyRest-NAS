@@ -10,13 +10,13 @@ import java.util.UUID;
  * String utils
  * Created by liuhongyu.louie on 2016/10/1.
  */
-public class StringUtils extends org.springframework.util.StringUtils {
+public class StringUtils{
     private static final String IntegerRegex = "^-?[0-9]+$";
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
     private static final DateFormat DATE_FORMAT_WITHOUT_MILLI = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static String replaceNull(String str){
-        if (isEmpty(str) || str.equalsIgnoreCase("null")){
+        if (isEmptyString(str) || str.equalsIgnoreCase("null")){
             return "";
         }
         return str;
