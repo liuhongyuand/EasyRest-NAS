@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
@@ -16,14 +17,21 @@ public class Response {
 
     private final static Gson GSON = new Gson();
     private FullHttpResponse response;
+    private HttpResponseStatus status = HttpResponseStatus.OK;
 
     public Response(){
         this.response = newResponse(ResponseEntity.buildOkResponse());
+        this.response.setStatus(status);
     }
 
     public Response buildResponse(ResponseEntity responseEntity){
         this.response = newResponse(responseEntity);
+        this.response.setStatus(status);
         return this;
+    }
+
+    public void setStatus(HttpResponseStatus status) {
+        this.status = status;
     }
 
     public FullHttpResponse getRealResponse() {

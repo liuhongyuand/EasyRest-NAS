@@ -1,9 +1,12 @@
 package com.easyrest.aop;
 
+import com.easyrest.model.HttpEntity;
+
 public class AopInvokeStep implements AopStep {
+
     @Override
-    public <T> T executeStep(T t) {
-        return null;
+    public HttpEntity executeStep(HttpEntity entity) {
+        return entity;
     }
 
     public void invoke(){

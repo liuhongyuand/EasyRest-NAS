@@ -8,7 +8,7 @@
     </context:component-scan>
     <context:annotation-config/>
 
-    <bean name="aopPreStep" class="com.easyrest.aop.pre.AopPreStep"/>
+    <bean name="aopPreStep" class="com.easyrest.aop.pre.AopInitRequestInfoStep"/>
 
     <bean name="aopRequestValidateStep" class="com.easyrest.aop.pre.AopRequestValidateStep"/>
 
