@@ -1,61 +1,56 @@
 package com.easyrest;
 
-import com.easyrest.annotations.method.Post;
-import com.easyrest.controller.EasyRestController;
+import akka.actor.ActorRef;
+import com.easyrest.akka.ActorFactory;
+import com.easyrest.akka.BindModelActor;
 import com.easyrest.ioc.utils.BeanOperationUtils;
-import com.easyrest.model.request.RequestModel;
-import com.easyrest.netty.exception.ConfigurationException;
-import com.easyrest.utils.LogUtils;
-import com.sun.org.apache.xpath.internal.Arg;
-import io.netty.bootstrap.ServerBootstrap;
+import com.easyrest.netty.NettyInit;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class EasyRest {
 
+    private String systemName;
 
-    public EasyRest(){
-        BeanOperationUtils.setApplicationContext(new ClassPathXmlApplicationContext("applicationContext.xml"));
+    private NettyInit nettyInit;
+
+    private Class[] requestModels;
+
+    public EasyRest() {
+        BeanOperationUtils.setApplicationContext(new ClassPathXmlApplicationContext("classpath:easyrest-applicationContext-01.xml"));
     }
 
-    private Map<List<String>, EasyRestController> restControllerMap = new HashMap<>();
-
-    public static void register(Class requestModel){
-        try {
-            if (requestModel.newInstance() instanceof RequestModel){
-                for (Method method : requestModel.getMethods()){
-                        if (method.isAnnotationPresent(Post.class)){
-                            System.out.println(method.getName());
-                            System.out.println(method.getParameters()[0].getParameterizedType());
-                            Arg[] args = new Arg[method.getParameters().length];
-                            for (int i = 0; i < args.length; i++) {
-                                args[i] = null;
-                            }
-                            EasyRestController easyRestController = (EasyRestController) BeanOperationUtils.getBean((Class) method.invoke(requestModel.newInstance(), args));
-                            easyRestController.doProcess(null);
-                        }
-                }
-            }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+    public EasyRest(String springXmlPath) {
+        String[] xmls = new String[]{"classpath:easyrest-applicationContext-01.xml", springXmlPath};
+        BeanOperationUtils.setApplicationContext(new ClassPathXmlApplicationContext(xmls));
     }
 
-    public void startServer(){
-        startServer(NettyInit.SystemName, new NettyInit());
+    public EasyRest(String... springXmlPaths) {
+        String[] xmls = new String[springXmlPaths.length + 1];
+        xmls[0] = "classpath:easyrest-applicationContext-01.xml";
+        System.arraycopy(springXmlPaths, 0, xmls, 1, xmls.length - 1);
+        BeanOperationUtils.setApplicationContext(new ClassPathXmlApplicationContext(xmls));
     }
 
-    public void startServer(String SystemName, NettyInit nettyInit){
-        if (nettyInit == null){
-            throw new ConfigurationException(String.format("%s can not be null.", NettyInit.class.getName()));
-        }
-        LogUtils.info(String.format("%s is running.", SystemName));
-        ServerBootstrap bootstrap = nettyInit.build(SystemName);
-        nettyInit.bindChannelFuture(bootstrap.bind(nettyInit.getPort()));
+    public void registerServiceAndStartup(Class... requestModels) {
+        registerServiceAndStartup(NettyInit.SystemName, new NettyInit(), requestModels);
+    }
+
+    public void registerServiceAndStartup(String SystemName, NettyInit nettyInit, Class... requestModels) {
+        this.systemName = SystemName;
+        this.nettyInit = nettyInit;
+        this.requestModels = requestModels;
+        ActorFactory.createActor(BindModelActor.class).tell(this, ActorRef.noSender());
+    }
+
+    public String getSystemName() {
+        return systemName;
+    }
+
+    public NettyInit getNettyInit() {
+        return nettyInit;
+    }
+
+    public Class[] getRequestModels() {
+        return requestModels;
     }
 }

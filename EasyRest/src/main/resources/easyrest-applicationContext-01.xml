@@ -7,4 +7,18 @@
     <context:component-scan base-package="com.easyrest">
     </context:component-scan>
     <context:annotation-config/>
+
+    <bean name="aopPreStep" class="com.easyrest.aop.pre.AopPreStep"/>
+
+    <bean name="aopRequestValidateStep" class="com.easyrest.aop.pre.AopRequestValidateStep"/>
+
+    <bean name="staticAopStepUtil" class="com.easyrest.aop.StaticAopStepUtil">
+        <property name="aopPreCommitStepList">
+            <list>
+                <ref bean="aopPreStep"/>
+                <ref bean="aopRequestValidateStep"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>

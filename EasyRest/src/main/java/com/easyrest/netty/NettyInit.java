@@ -1,4 +1,4 @@
-package com.easyrest;
+package com.easyrest.netty;
 
 import com.easyrest.netty.conf.ChannelOptionBuilder;
 import com.easyrest.netty.core.api.BaseConfiguration;

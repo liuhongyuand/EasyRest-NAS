@@ -15,11 +15,22 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 public class Response {
 
     private final static Gson GSON = new Gson();
+    private FullHttpResponse response;
 
     public Response(){
+        this.response = newResponse(ResponseEntity.buildOkResponse());
     }
 
-    public FullHttpResponse buildResponse(ResponseEntity responseEntity){
+    public Response buildResponse(ResponseEntity responseEntity){
+        this.response = newResponse(responseEntity);
+        return this;
+    }
+
+    public FullHttpResponse getRealResponse() {
+        return response;
+    }
+
+    private FullHttpResponse newResponse(ResponseEntity responseEntity){
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(GSON.toJson(responseEntity).getBytes()));
         response.headers().set(CONTENT_TYPE, "application/json");
         response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
