@@ -16,7 +16,7 @@ public class HttpEntity {
     private ChannelHandlerContext channelHandlerContext;
     private ResponseEntity responseEntity;
     private Map<String, String> errorMap = new HashMap<>();
-    private Object[] args;
+    private Object[] args = new Object[0];
 
     public HttpEntity(Request request, Response response, ChannelHandlerContext channelHandlerContext) {
         this.request = request;

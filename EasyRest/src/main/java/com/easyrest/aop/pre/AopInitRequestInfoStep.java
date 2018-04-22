@@ -3,7 +3,7 @@ package com.easyrest.aop.pre;
 import com.easyrest.aop.AopPreCommitStep;
 import com.easyrest.model.HttpEntity;
 import com.easyrest.model.request.RestObject;
-import com.easyrest.router.RouterProvider;
+import com.easyrest.network.router.RouterProvider;
 
 /**
  * Created by liuhongyu.louie on 2016/12/31.

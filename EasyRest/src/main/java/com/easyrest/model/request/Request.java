@@ -1,6 +1,6 @@
 package com.easyrest.model.request;
 
-import com.easyrest.netty.core.pipeline.utils.ByteBufUtils;
+import com.easyrest.network.core.pipeline.utils.ByteBufUtils;
 import com.easyrest.utils.LogUtils;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.multipart.Attribute;

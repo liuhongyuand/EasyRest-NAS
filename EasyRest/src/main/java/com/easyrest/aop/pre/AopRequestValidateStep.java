@@ -5,7 +5,7 @@ import com.easyrest.exception.MethodNotAllowedException;
 import com.easyrest.exception.PageNotFoundException;
 import com.easyrest.model.HttpEntity;
 import com.easyrest.model.request.RestObject;
-import com.easyrest.router.RouterProvider;
+import com.easyrest.network.router.RouterProvider;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.springframework.stereotype.Service;
 

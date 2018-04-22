@@ -12,7 +12,7 @@
 
     <bean name="aopInitRequestInfoStep" class="com.easyrest.aop.pre.AopInitRequestInfoStep"/>
 
-    <bean name="aopParametersInvokeStep" class="com.easyrest.aop.pre.AopParametersInvokeStep"/>
+    <bean name="aopParametersInvokeStep" class="com.easyrest.aop.pre.AopParametersInjectStep"/>
 
     <bean name="staticClassUtils" class="com.easyrest.ioc.utils.StaticClassUtils">
         <property name="parameterNameDiscoverer">

@@ -1,10 +1,10 @@
 package com.easyrest;
 
 import akka.actor.ActorRef;
-import com.easyrest.akka.ActorFactory;
-import com.easyrest.akka.BindModelActor;
+import com.easyrest.actors.ActorFactory;
+import com.easyrest.actors.BindModelActor;
 import com.easyrest.ioc.utils.BeanOperationUtils;
-import com.easyrest.netty.NettyInit;
+import com.easyrest.network.NettyInit;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class EasyRest {
