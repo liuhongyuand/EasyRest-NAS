@@ -83,21 +83,25 @@ public class Example {
 * 'ResponseEntity' is the generic response entity, you can put any thing you want in it.
 
 * If you have own spring properties, you can create EasyRest by
-> EasyRest easyRest = new EasyRest("classpath:applicationContext.xml", "classpath:applicationContext-01.xml"...);
-
+```java
+EasyRest easyRest = new EasyRest("classpath:applicationContext.xml", "classpath:applicationContext-01.xml"...);
+```
 * Register your method to the EasyRest 
-> easyRest.registerServiceAndStartup(PeopleRestEndPoint.class...);
+```java
+easyRest.registerServiceAndStartup(PeopleRestEndPoint.class...);
+```
 
-For the methd 
+
+#### For the methd 
 ```java
 @Get
 ResponseEntity getAllName();
 ```
-You can call it by 
+You can call it at 
 ```java
 GET http://hostname:port/people/getAllName
 ```
-and the response is:
+And the response is:
 ```java
 {
     "code": "1",
