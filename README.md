@@ -150,3 +150,73 @@ And the response is:
     }
 }
 ```
+
+***
+#### For the methd 
+```java
+@Post
+ResponseEntity addBatch(List<People> peoples);
+```
+You can call it at 
+```java
+POST http://hostname:port/people/addBatch
+Content Type should be 'application/json'
+Body: [{"name":"Louie1", "age":"20"},{"name":"Louie2", "age":"21"}]
+```
+And the response is:
+```java
+{
+    "code": "1",
+    "data": [
+        {
+            "name": "Louie1",
+            "age": 20
+        },
+        {
+            "name": "Louie2",
+            "age": 21
+        }
+    ]
+}
+```
+
+***
+#### For the methd 
+```java
+@Post
+ResponseEntity addBatchWithDetails(List<People> peoples, List<String> name, List<Integer> age, long birth);
+```
+You can call it at 
+```java
+POST http://hostname:port/people/addBatch
+Content Type should be 'application/json'
+Body: {"peoples":[{"name":"Louie", "age":"20"},{"name":"Louie", "age":"20"}], "name":["name1", "name2", "name3"], "age":[17,28], "birth":19930201}
+```
+And the response is:
+```java
+{
+    "code": "1",
+    "data": [
+        [
+            {
+                "name": "Louie",
+                "age": 20
+            },
+            {
+                "name": "Louie",
+                "age": 20
+            }
+        ],
+        [
+            "name1",
+            "name2",
+            "name3"
+        ],
+        [
+            17,
+            28
+        ],
+        19930201
+    ]
+}
+```
