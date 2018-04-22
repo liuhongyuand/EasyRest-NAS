@@ -6,6 +6,7 @@ import com.easyrest.actors.ActorFactory;
 import com.easyrest.actors.ExceptionHandleActor;
 import com.easyrest.aop.StaticAopStepUtil;
 import com.easyrest.model.HttpEntity;
+import com.easyrest.utils.LogUtils;
 
 public class ResponseProcessActor extends AbstractActor {
 
@@ -18,6 +19,7 @@ public class ResponseProcessActor extends AbstractActor {
                     try {
                         httpEntityTemp[0] = step.executeStep(httpEntityTemp[0]);
                     } catch (Exception e) {
+                        LogUtils.error(e.getMessage(), e);
                         httpEntityTemp[0].addError(e);
                     }
                 }

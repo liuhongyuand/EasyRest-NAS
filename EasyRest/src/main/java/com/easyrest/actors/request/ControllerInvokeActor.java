@@ -8,6 +8,7 @@ import com.easyrest.actors.response.ResponseProcessActor;
 import com.easyrest.ioc.utils.BeanOperationUtils;
 import com.easyrest.model.HttpEntity;
 import com.easyrest.model.ResponseEntity;
+import com.easyrest.utils.LogUtils;
 
 import java.lang.reflect.Method;
 
@@ -28,7 +29,7 @@ public class ControllerInvokeActor extends AbstractActor {
                 httpEntity.setResponseEntity(responseEntity);
                 ActorFactory.createActor(ResponseProcessActor.class).tell(httpEntity, ActorRef.noSender());
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.error(e.getMessage(), e);
                 httpEntity.addError(e);
                 ActorFactory.createActor(ExceptionHandleActor.class).tell(httpEntity, ActorRef.noSender());
             }

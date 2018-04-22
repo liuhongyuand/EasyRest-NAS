@@ -1,6 +1,7 @@
 package com.easyrest.model.request;
 
 import com.easyrest.network.core.pipeline.utils.ByteBufUtils;
+import com.easyrest.network.router.UrlFormat;
 import com.easyrest.utils.LogUtils;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.multipart.Attribute;
@@ -26,9 +27,11 @@ public class Request {
 
     private Map<String, String> formData = new HashMap<>();
 
+    private Map<String, String> parameterFromURL = new HashMap<>();
+
     public Request(FullHttpRequest fullHttpRequest) {
         requestHttpMethod = fullHttpRequest.method().name();
-        requestUri = fullHttpRequest.uri();
+        requestUri = UrlFormat.getUrl(fullHttpRequest.uri(), parameterFromURL);
         fullHttpRequest.headers().forEach((header) -> headers.putIfAbsent(header.getKey(), header.getValue()));
         HttpPostRequestDecoder postRequestDecoder = new HttpPostRequestDecoder(fullHttpRequest);
         originByte = ByteBufUtils.readAll(fullHttpRequest.content());
@@ -58,6 +61,10 @@ public class Request {
 
     public String getRequestHttpMethod() {
         return requestHttpMethod;
+    }
+
+    public Map<String, String> getParameterFromURL() {
+        return parameterFromURL;
     }
 
     public String getRequestUri() {
