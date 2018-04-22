@@ -8,15 +8,24 @@
     </context:component-scan>
     <context:annotation-config/>
 
-    <bean name="aopPreStep" class="com.easyrest.aop.pre.AopInitRequestInfoStep"/>
-
     <bean name="aopRequestValidateStep" class="com.easyrest.aop.pre.AopRequestValidateStep"/>
+
+    <bean name="aopInitRequestInfoStep" class="com.easyrest.aop.pre.AopInitRequestInfoStep"/>
+
+    <bean name="aopParametersInvokeStep" class="com.easyrest.aop.pre.AopParametersInvokeStep"/>
+
+    <bean name="staticClassUtils" class="com.easyrest.ioc.utils.StaticClassUtils">
+        <property name="parameterNameDiscoverer">
+            <bean class="org.springframework.core.DefaultParameterNameDiscoverer"/>
+        </property>
+    </bean>
 
     <bean name="staticAopStepUtil" class="com.easyrest.aop.StaticAopStepUtil">
         <property name="aopPreCommitStepList">
             <list>
-                <ref bean="aopPreStep"/>
                 <ref bean="aopRequestValidateStep"/>
+                <ref bean="aopInitRequestInfoStep"/>
+                <ref bean="aopParametersInvokeStep"/>
             </list>
         </property>
     </bean>

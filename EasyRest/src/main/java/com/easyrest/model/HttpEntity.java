@@ -12,9 +12,11 @@ public class HttpEntity {
     private Method method;
     private Request request;
     private Response response;
+    private Class controller;
     private ChannelHandlerContext channelHandlerContext;
     private ResponseEntity responseEntity;
     private Map<String, String> errorMap = new HashMap<>();
+    private Object[] args;
 
     public HttpEntity(Request request, Response response, ChannelHandlerContext channelHandlerContext) {
         this.request = request;
@@ -48,6 +50,22 @@ public class HttpEntity {
 
     public ChannelHandlerContext getChannelHandlerContext() {
         return channelHandlerContext;
+    }
+
+    public Class getController() {
+        return controller;
+    }
+
+    public void setController(Class controller) {
+        this.controller = controller;
+    }
+
+    public Object[] getArgs() {
+        return args;
+    }
+
+    public void setArgs(Object[] args) {
+        this.args = args;
     }
 
     public void addError(Exception e){

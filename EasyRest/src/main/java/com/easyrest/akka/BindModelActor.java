@@ -8,7 +8,9 @@ import com.easyrest.model.request.RestObject;
 import com.easyrest.netty.NettyLaunch;
 import com.easyrest.netty.exception.ConfigurationException;
 import com.easyrest.router.RouterProvider;
+import com.easyrest.utils.LogUtils;
 import io.netty.handler.codec.http.HttpMethod;
+import javassist.NotFoundException;
 
 import java.lang.reflect.Method;
 
@@ -33,37 +35,43 @@ public class BindModelActor extends AbstractActor {
                 }
             }
             for (Method method : requestModel.getMethods()) {
+                Class controller = null;
+                RestObject restObject;
                 if (method.isAnnotationPresent(Post.class)) {
                     String url = method.getAnnotation(Post.class).url();
-                    Class controller = method.getAnnotation(Post.class).controller();
-                    RestObject restObject = new RestObject(method, HttpMethod.POST, controller);
+                    controller = method.getAnnotation(Post.class).controller();
+                    restObject = new RestObject(method, HttpMethod.POST, controller);
                     for (StringBuffer aRestUri : restUri) {
                         putRouter(aRestUri + url, HttpMethod.POST, restObject);
                     }
                 }
                 if (method.isAnnotationPresent(Get.class)) {
                     String url = method.getAnnotation(Get.class).url();
-                    Class controller = method.getAnnotation(Get.class).controller();
-                    RestObject restObject = new RestObject(method, HttpMethod.GET, controller);
+                    controller = method.getAnnotation(Get.class).controller();
+                    restObject = new RestObject(method, HttpMethod.GET, controller);
                     for (StringBuffer aRestUri : restUri) {
                         putRouter(aRestUri + url, HttpMethod.GET, restObject);
                     }
                 }
                 if (method.isAnnotationPresent(Put.class)) {
                     String url = method.getAnnotation(Put.class).url();
-                    Class controller = method.getAnnotation(Put.class).controller();
-                    RestObject restObject = new RestObject(method, HttpMethod.PUT, controller);
+                    controller = method.getAnnotation(Put.class).controller();
+                    restObject = new RestObject(method, HttpMethod.PUT, controller);
                     for (StringBuffer aRestUri : restUri) {
                         putRouter(aRestUri + url, HttpMethod.PUT, restObject);
                     }
                 }
                 if (method.isAnnotationPresent(Delete.class)) {
                     String url = method.getAnnotation(Delete.class).url();
-                    Class controller = method.getAnnotation(Delete.class).controller();
-                    RestObject restObject = new RestObject(method, HttpMethod.DELETE, controller);
+                    controller = method.getAnnotation(Delete.class).controller();
+                    restObject = new RestObject(method, HttpMethod.DELETE, controller);
                     for (StringBuffer aRestUri : restUri) {
                         putRouter(aRestUri + url, HttpMethod.DELETE, restObject);
                     }
+                }
+                if (controller == null){
+                    LogUtils.error("Controller is missing", new NotFoundException("Controller is missing"));
+                    System.exit(-1);
                 }
             }
         }

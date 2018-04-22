@@ -7,6 +7,6 @@ import com.easyrest.model.HttpEntity;
  */
 public interface AopStep {
 
-    HttpEntity executeStep(HttpEntity httpEntity);
+    HttpEntity executeStep(HttpEntity httpEntity) throws Exception;
 
 }

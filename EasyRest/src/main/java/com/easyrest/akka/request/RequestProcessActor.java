@@ -15,7 +15,11 @@ public class RequestProcessActor extends AbstractActor {
             HttpEntity[] httpEntityTemp = {httpEntity};
             StaticAopStepUtil.getAopPreCommitStepList().forEach((step) -> {
                 if (httpEntityTemp[0].getErrorMap().size() == 0) {
-                    httpEntityTemp[0] = step.executeStep(httpEntityTemp[0]);
+                    try {
+                        httpEntityTemp[0] = step.executeStep(httpEntityTemp[0]);
+                    } catch (Exception e) {
+                        httpEntityTemp[0].addError(e);
+                    }
                 }
             });
             if (httpEntityTemp[0].getErrorMap().size() == 0) {

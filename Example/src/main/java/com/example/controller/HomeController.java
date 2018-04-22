@@ -2,16 +2,15 @@ package com.example.controller;
 
 import com.easyrest.model.ResponseEntity;
 import com.example.rest.HomeRestModel;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Controller;
-
-import java.util.List;
 
 @Controller
 public class HomeController implements HomeRestModel{
 
     @Override
-    public ResponseEntity addHomeList(List<String> list, String name) {
-        return ResponseEntity.buildOkResponse("It Works! addHomeList");
+    public ResponseEntity addHomeList(String name, Integer age, long birth) {
+        return ResponseEntity.buildOkResponse(Lists.newArrayList(name, age, birth));
     }
 
     @Override

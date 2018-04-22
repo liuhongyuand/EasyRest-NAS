@@ -8,14 +8,12 @@ import com.easyrest.annotations.parameter.Optional;
 import com.easyrest.model.ResponseEntity;
 import com.example.controller.HomeController;
 
-import java.util.List;
-
 @BindURL({"/rest"})
 public interface HomeRestModel {
 
     @AllDefined
     @Post(url = "/addHomeList", controller = HomeController.class)
-    ResponseEntity addHomeList(List<String> list, @Optional String name);
+    ResponseEntity addHomeList(@Optional String name, Integer age, long birth);
 
     @Get(url = "/getHome", controller = HomeController.class)
     ResponseEntity getHomeList(@Optional String name);
