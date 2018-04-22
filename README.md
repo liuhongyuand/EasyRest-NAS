@@ -9,21 +9,22 @@ Quick start:
 * The rest definition
 ```java
 @BindURL({"/people"})
+@BindController(PeopleController.class)
 public interface PeopleRestEndPoint {
 
-    @Get(url = "/getNameList", controller = PeopleController.class)
+    @Get
     ResponseEntity getAllName();
 
-    @Get(url = "/getPeople", controller = PeopleController.class)
+    @Get
     ResponseEntity getPeople(String name, int age);
 
-    @Post(url = "/addPeople", controller = PeopleController.class)
+    @Post
     ResponseEntity addPeople(People people);
 
-    @Post(url = "/addPeoples", controller = PeopleController.class)
+    @Post
     ResponseEntity addBatch(List<People> peoples);
 
-    @Post(url = "/addPeoplesWithDetails", controller = PeopleController.class)
+    @Post
     ResponseEntity addBatchWithDetails(List<People> peoples, List<String> name, List<Integer> age, long birth);
 }
 ```

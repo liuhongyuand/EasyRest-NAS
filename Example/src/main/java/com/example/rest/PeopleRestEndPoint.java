@@ -1,5 +1,6 @@
 package com.example.rest;
 
+import com.easyrest.annotations.bean.BindController;
 import com.easyrest.annotations.method.BindURL;
 import com.easyrest.annotations.method.Get;
 import com.easyrest.annotations.method.Post;
@@ -10,20 +11,21 @@ import com.example.model.People;
 import java.util.List;
 
 @BindURL({"/people"})
+@BindController(PeopleController.class)
 public interface PeopleRestEndPoint {
 
-    @Get(url = "/getNameList", controller = PeopleController.class)
+    @Get
     ResponseEntity getAllName();
 
-    @Get(url = "/getPeople", controller = PeopleController.class)
+    @Get
     ResponseEntity getPeople(String name, int age);
 
-    @Post(url = "/addPeople", controller = PeopleController.class)
+    @Post
     ResponseEntity addPeople(People people);
 
-    @Post(url = "/addPeoples", controller = PeopleController.class)
+    @Post
     ResponseEntity addBatch(List<People> peoples);
 
-    @Post(url = "/addPeoplesWithDetails", controller = PeopleController.class)
+    @Post
     ResponseEntity addBatchWithDetails(List<People> peoples, List<String> name, List<Integer> age, long birth);
 }

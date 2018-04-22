@@ -9,6 +9,4 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Delete {
-    String url();
-    Class controller();
 }
