@@ -39,6 +39,7 @@ public class EasyRest {
         this.systemName = SystemName;
         this.nettyInit = nettyInit;
         this.requestModels = requestModels;
+        NettyInit.SystemName = systemName;
         ActorFactory.createActor(BindModelActor.class).tell(this, ActorRef.noSender());
     }
 

@@ -6,12 +6,12 @@
 
     <groupId>EasyRest</groupId>
     <artifactId>EasyRest-example</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>EasyRest</groupId>
             <artifactId>EasyRest-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

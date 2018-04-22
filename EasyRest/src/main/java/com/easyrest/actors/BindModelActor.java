@@ -9,6 +9,7 @@ import com.easyrest.model.request.RestObject;
 import com.easyrest.network.NettyLaunch;
 import com.easyrest.network.exception.ConfigurationException;
 import com.easyrest.network.router.RouterProvider;
+import com.easyrest.utils.LogUtils;
 import io.netty.handler.codec.http.HttpMethod;
 
 import java.lang.reflect.Method;
@@ -24,6 +25,10 @@ public class BindModelActor extends AbstractActor {
         for (Class requestModel: easyRest.getRequestModels()) {
             if (!requestModel.isInterface()){
                 throw new ConfigurationException("Only interface can be registered.");
+            }
+            if (!requestModel.isAnnotationPresent(BindController.class)){
+                LogUtils.error(requestModel.getSimpleName() + " controller is missing", new ConfigurationException(requestModel.getSimpleName() + " controller is missing"));
+                System.exit(-1);
             }
             Class controller = ((BindController)requestModel.getAnnotation(BindController.class)).value();
             StringBuffer[] restUri = new StringBuffer[1];
@@ -74,7 +79,7 @@ public class BindModelActor extends AbstractActor {
         if (!bindUrl.startsWith("/")){
             url.insert(0, "/");
         }
-        if (!bindUrl.endsWith("/")){
+        if (!bindUrl.endsWith("/") && !methodUrl.startsWith("/")){
             url.insert(bindUrl.length(), "/");
         }
         url.append(methodUrl);
