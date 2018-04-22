@@ -74,7 +74,7 @@ public class Example {
 ```
 
 ####
-* BindURL({"/people"}) will bind this endpoint at "/people"
+* @BindURL({"/people"}) will bind this endpoint at "/people"
 
 * @BindController(PeopleController.class) to tell the framwork which controller should use.
 
