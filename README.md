@@ -91,7 +91,7 @@ EasyRest easyRest = new EasyRest("classpath:applicationContext.xml", "classpath:
 easyRest.registerServiceAndStartup(PeopleRestEndPoint.class...);
 ```
 
-
+***
 #### For the methd 
 ```java
 @Get
@@ -113,4 +113,40 @@ And the response is:
 }
 ```
 
+***
+#### For the methd 
+```java
+@Post
+ResponseEntity addPeople(People people);
+```
+The People class is:
+```java
+public class People {
 
+    private String name;
+
+    private int age;
+
+    public People(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+}
+```
+You can call it at 
+```java
+POST http://hostname:port/people/addPeople
+Content Type should be 'application/json'
+Body: {"name":"Louie", "age":"24"}
+```
+And the response is:
+```java
+{
+    "code": "1",
+    "data": {
+        "name": "Louie",
+        "age": 24
+    }
+}
+```
