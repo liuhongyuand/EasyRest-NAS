@@ -35,13 +35,13 @@ public interface PeopleRestEndPoint {
 public class PeopleController implements PeopleRestEndPoint {
 
     @Override
-    public ResponseEntity getPeople(String name, int age) {
-        return ResponseEntity.buildOkResponse(new People(name, age));
-    }
-
-    @Override
     public ResponseEntity getAllName() {
         return ResponseEntity.buildCustomizeResponse(1, "ok", Lists.newArrayList("First", "Second"));
+    }
+    
+    @Override
+    public ResponseEntity getPeople(String name, int age) {
+        return ResponseEntity.buildOkResponse(new People(name, age));
     }
 
     @Override
@@ -66,10 +66,46 @@ public class PeopleController implements PeopleRestEndPoint {
 public class Example {
 
     public static void main(String[] args) {
-        EasyRest easyRest = new EasyRest("classpath:applicationContext.xml");
+        EasyRest easyRest = new EasyRest();
         easyRest.registerServiceAndStartup(PeopleRestEndPoint.class);
     }
 
+}
+```
+
+####
+* BindURL({"/people"}) will bind this endpoint at "/people"
+
+* @BindController(PeopleController.class) to tell the framwork which controller should use.
+
+* @Controller is spring annotation, that will create bean by spring.
+
+* 'ResponseEntity' is the generic response entity, you can put any thing you want in it.
+
+* If you have own spring properties, you can create EasyRest by
+> EasyRest easyRest = new EasyRest("classpath:applicationContext.xml", "classpath:applicationContext-01.xml"...);
+
+* Register your method to the EasyRest 
+> easyRest.registerServiceAndStartup(PeopleRestEndPoint.class...);
+
+For the methd 
+```java
+@Get
+ResponseEntity getAllName();
+```
+You can call it by 
+```java
+GET http://hostname:port/people/getAllName
+```
+and the response is:
+```java
+{
+    "code": "1",
+    "message": "ok",
+    "data": [
+        "First",
+        "Second"
+    ]
 }
 ```
 
