@@ -2,7 +2,7 @@
 
 EasyRest with Netty, Akka and Spring.
 
-This is RESTful framework for fast development.
+This is RESTful framework for fast development. Easy to cluster and distributed. Focus on your business logic.
 
 Quick start:
 
