@@ -1,6 +1,7 @@
 package com.easyrest.model;
 
 import com.easyrest.model.request.Request;
+import com.easyrest.model.request.RestObject;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.lang.reflect.Method;
@@ -15,6 +16,7 @@ public class HttpEntity {
     private Class controller;
     private ChannelHandlerContext channelHandlerContext;
     private ResponseEntity responseEntity;
+    private RestObject restObject;
     private Map<String, String> errorMap = new HashMap<>();
     private Object[] args = new Object[0];
 
@@ -70,6 +72,14 @@ public class HttpEntity {
 
     public void addError(Exception e){
         errorMap.put(e.getMessage(), e.getClass().getSimpleName());
+    }
+
+    public RestObject getRestObject() {
+        return restObject;
+    }
+
+    public void setRestObject(RestObject restObject) {
+        this.restObject = restObject;
     }
 
     public Map<String, String> getErrorMap() {

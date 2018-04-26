@@ -7,8 +7,14 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class StockInfoRestController implements StockInfoRest {
+
     @Override
-    public ResponseEntity getStockInfo() {
+    public ResponseEntity getStockInfo(String ID) {
         return ResponseEntity.buildOkResponse(Example.port);
+    }
+
+    @Override
+    public ResponseEntity getStockList() {
+        return ResponseEntity.buildOkResponse();
     }
 }

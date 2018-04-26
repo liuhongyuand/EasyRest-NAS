@@ -23,7 +23,7 @@ public class AopRequestValidateStep implements AopPreCommitStep {
     @Override
     public HttpEntity executeStep(HttpEntity entity) throws Exception {
         String url = entity.getRequest().getRequestUri();
-        RestObject restObject = RouterProvider.getRestObjectMap().get(url);
+        RestObject restObject = RouterProvider.getRestObject(url);
         if (restObject == null){
             entity.getResponse().getRealResponse().setStatus(HttpResponseStatus.NOT_FOUND);
             throw new PageNotFoundException(String.format(NOT_FOUND, url));
@@ -33,6 +33,7 @@ public class AopRequestValidateStep implements AopPreCommitStep {
                 throw new MethodNotAllowedException(String.format(NOT_ALLOWED, entity.getRequest().getRequestHttpMethod()));
             }
         }
+        entity.setRestObject(restObject);
         return entity;
     }
 

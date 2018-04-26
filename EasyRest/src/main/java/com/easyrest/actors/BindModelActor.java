@@ -5,7 +5,6 @@ import akka.actor.ActorRef;
 import com.easyrest.EasyRest;
 import com.easyrest.annotations.bean.BindController;
 import com.easyrest.annotations.method.*;
-import com.easyrest.model.request.RestObject;
 import com.easyrest.network.NettyLaunch;
 import com.easyrest.network.exception.ConfigurationException;
 import com.easyrest.network.router.RouterProvider;
@@ -16,78 +15,49 @@ import java.lang.reflect.Method;
 
 public class BindModelActor extends AbstractActor {
 
+    private static final Class[] HTTP_METHOD_ANNOTATIONS = {Get.class, Post.class, Put.class, Delete.class};
+
+    private static final HttpMethod[] HTTP_METHODS = {HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE};
+
     @Override
     public Receive createReceive() {
         return receiveBuilder().match(EasyRest.class, (this::analysisRestObject)).build();
     }
 
-    private void analysisRestObject(EasyRest easyRest){
-        for (Class requestModel: easyRest.getRequestModels()) {
-            if (!requestModel.isInterface()){
+    private void analysisRestObject(EasyRest easyRest) {
+        for (Class requestModel : easyRest.getRequestModels()) {
+            if (!requestModel.isInterface()) {
                 throw new ConfigurationException("Only interface can be registered.");
             }
-            if (!requestModel.isAnnotationPresent(BindController.class)){
+            if (!requestModel.isAnnotationPresent(BindController.class)) {
                 LogUtils.error(requestModel.getSimpleName() + " controller is missing", new ConfigurationException(requestModel.getSimpleName() + " controller is missing"));
-                System.exit(-1);
+                continue;
             }
-            Class controller = ((BindController)requestModel.getAnnotation(BindController.class)).value();
+            Class controller = ((BindController) requestModel.getAnnotation(BindController.class)).value();
             StringBuffer[] restUri = new StringBuffer[1];
-            if (requestModel.isAnnotationPresent(BindURL.class)){
-                String[] uris = ((BindURL)requestModel.getAnnotation(BindURL.class)).value();
+            if (requestModel.isAnnotationPresent(BindURL.class)) {
+                String[] uris = ((BindURL) requestModel.getAnnotation(BindURL.class)).value();
                 restUri = new StringBuffer[uris.length];
                 for (int i = 0; i < restUri.length; i++) {
                     restUri[i] = new StringBuffer(uris[i]);
                 }
             }
             for (Method method : requestModel.getMethods()) {
-                RestObject restObject;
                 if (method.isAnnotationPresent(Post.class)) {
-                    String url = method.getName();
-                    restObject = new RestObject(method, HttpMethod.POST, controller);
-                    for (StringBuffer aRestUri : restUri) {
-                        putRouter(aRestUri.toString(), url, HttpMethod.POST, restObject);
-                    }
+                    RouterProvider.methodRouterResolve(restUri, method.getName(), method.getAnnotation(Post.class).value(), HttpMethod.POST, method, controller);
                 }
                 if (method.isAnnotationPresent(Get.class)) {
-                    String url = method.getName();
-                    restObject = new RestObject(method, HttpMethod.GET, controller);
-                    for (StringBuffer aRestUri : restUri) {
-                        putRouter(aRestUri.toString(), url, HttpMethod.GET, restObject);
-                    }
+                    RouterProvider.methodRouterResolve(restUri, method.getName(), method.getAnnotation(Get.class).value(), HttpMethod.GET, method, controller);
                 }
                 if (method.isAnnotationPresent(Put.class)) {
-                    String url = method.getName();
-                    restObject = new RestObject(method, HttpMethod.PUT, controller);
-                    for (StringBuffer aRestUri : restUri) {
-                        putRouter(aRestUri.toString(), url, HttpMethod.PUT, restObject);
-                    }
+                    RouterProvider.methodRouterResolve(restUri, method.getName(), method.getAnnotation(Put.class).value(), HttpMethod.PUT, method, controller);
                 }
                 if (method.isAnnotationPresent(Delete.class)) {
-                    String url = method.getName();
-                    restObject = new RestObject(method, HttpMethod.DELETE, controller);
-                    for (StringBuffer aRestUri : restUri) {
-                        putRouter(aRestUri.toString(), url, HttpMethod.DELETE, restObject);
-                    }
+                    RouterProvider.methodRouterResolve(restUri, method.getName(), method.getAnnotation(Delete.class).value(), HttpMethod.DELETE, method, controller);
                 }
             }
         }
         ActorFactory.createActor(NettyLaunch.class).tell(easyRest, ActorRef.noSender());
-    }
-
-    private void putRouter(String bindUrl, String methodUrl, HttpMethod httpMethod, RestObject restObject){
-        StringBuilder url = new StringBuilder(bindUrl);
-        if (!bindUrl.startsWith("/")){
-            url.insert(0, "/");
-        }
-        if (!bindUrl.endsWith("/") && !methodUrl.startsWith("/")){
-            url.insert(bindUrl.length(), "/");
-        }
-        url.append(methodUrl);
-        if (RouterProvider.getRestObjectMap().containsKey(url.toString())){
-            RouterProvider.getRestObjectMap().get(url.toString()).addHttpMethod(httpMethod);
-        } else {
-            RouterProvider.getRestObjectMap().put(url.toString(), restObject);
-        }
     }
 
 }

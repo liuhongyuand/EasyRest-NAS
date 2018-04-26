@@ -18,12 +18,20 @@ public class JsonDataResolve {
         if (args.length > 1){
             Map dataMap = GSON.fromJson(httpEntity.getRequest().getJsonData(), Map.class);
             restObject.getParameterTypeMap().forEach((name, type) -> {
-                args[index[0]] = GSON.fromJson(String.valueOf(dataMap.get(name)), type);
+                if (httpEntity.getRestObject().getUriValues().containsKey(name)){
+                    args[index[0]] = httpEntity.getRestObject().getUriValues().get(name);
+                } else {
+                    args[index[0]] = GSON.fromJson(String.valueOf(dataMap.get(name)), type);
+                }
                 index[0]++;
             });
         } else if (args.length == 1){
             restObject.getParameterTypeMap().forEach((name, type) -> {
-                args[index[0]] = GSON.fromJson(httpEntity.getRequest().getJsonData(), type);
+                if (httpEntity.getRestObject().getUriValues().containsKey(name)){
+                    args[index[0]] = httpEntity.getRestObject().getUriValues().get(name);
+                } else {
+                    args[index[0]] = GSON.fromJson(httpEntity.getRequest().getJsonData(), type);
+                }
                 index[0]++;
             });
         }

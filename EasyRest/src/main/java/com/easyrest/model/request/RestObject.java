@@ -20,6 +20,10 @@ public class RestObject {
 
     private Map<String, Type> parameterTypeMap = new LinkedHashMap<>();
 
+    private Map<String, String> UriValues = new HashMap<>();
+
+    private String originalPath;
+
     public RestObject(Method method, HttpMethod httpMethodName, Class controller) {
         this.method = method;
         this.httpMethodList.add(httpMethodName.name().toLowerCase());
@@ -31,6 +35,22 @@ public class RestObject {
         if (!httpMethodList.contains(httpMethod.name().toLowerCase())){
             httpMethodList.add(httpMethod.name().toLowerCase());
         }
+    }
+
+    public void putToUriValueMap(String name, String value){
+        UriValues.put(name, value);
+    }
+
+    public String getOriginalPath() {
+        return originalPath;
+    }
+
+    public void setOriginalPath(String originalPath) {
+        this.originalPath = originalPath;
+    }
+
+    public Map<String, String> getUriValues() {
+        return UriValues;
     }
 
     public Method getMethod() {

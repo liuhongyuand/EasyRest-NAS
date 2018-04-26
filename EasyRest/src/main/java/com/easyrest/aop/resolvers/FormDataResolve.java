@@ -12,7 +12,11 @@ public class FormDataResolve {
         final int[] index = {0};
         restObject.getParameterTypeMap().forEach((name, type) -> {
             try {
-                args[index[0]] = ParameterTypeResolve.resolveType(type, httpEntity.getRequest().getFormData().get(name));
+                if (httpEntity.getRestObject().getUriValues().containsKey(name)){
+                    args[index[0]] = httpEntity.getRestObject().getUriValues().get(name);
+                } else {
+                    args[index[0]] = ParameterTypeResolve.resolveType(type, httpEntity.getRequest().getFormData().get(name));
+                }
             } catch (NumberFormatException e) {
                 httpEntity.addError(e);
             }
