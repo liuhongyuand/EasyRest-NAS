@@ -24,7 +24,7 @@ public class Response {
         this.response.setStatus(status);
     }
 
-    public Response buildResponse(ResponseEntity responseEntity){
+    public Response buildResponse(Object responseEntity){
         this.response = newResponse(responseEntity);
         this.response.setStatus(status);
         return this;
@@ -38,7 +38,7 @@ public class Response {
         return response;
     }
 
-    private FullHttpResponse newResponse(ResponseEntity responseEntity){
+    private FullHttpResponse newResponse(Object responseEntity){
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(GSON.toJson(responseEntity).getBytes()));
         response.headers().set(CONTENT_TYPE, "application/json");
         response.headers().set(CONTENT_LENGTH, response.content().readableBytes());

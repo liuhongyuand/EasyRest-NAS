@@ -62,7 +62,7 @@ public class ResponseEntity<T>  {
 
     public static ResponseEntity<Boolean> buildOkResponse(){
         ResponseEntity<Boolean> responseEntity = new ResponseEntity<>();
-        responseEntity.setData(true);
+        responseEntity.setMessage("ok");
         return responseEntity;
     }
 
@@ -91,6 +91,14 @@ public class ResponseEntity<T>  {
         responseEntity.setData(t);
         responseEntity.setCode(String.valueOf(code));
         responseEntity.setMessage(message);
+        return responseEntity;
+    }
+
+    public static <T>ResponseEntity<T> buildBaseResponse(T t){
+        ResponseEntity<T> responseEntity = new ResponseEntity<>();
+        responseEntity.setData(t);
+        responseEntity.setCode(null);
+        responseEntity.setMessage(null);
         return responseEntity;
     }
 

@@ -8,55 +8,40 @@ Quick start:
 
 * The rest definition
 ```java
-@BindURL({"/people"})
-@BindController(PeopleController.class)
-public interface PeopleRestEndPoint {
+@BindURL("/rest/{TENANT}/stock")
+@BindController(StockInfoRestController.class)
+public interface StockInfoRest {
 
-    @Get
-    ResponseEntity getAllName();
-
-    @Get
-    ResponseEntity getPeople(String name, int age);
+    @Post("/personal/{USER_ID}/favorite/{CODE}")
+    void addFavorite(String USER_ID, String CODE, long time);
 
     @Post
-    ResponseEntity addPeople(People people);
+    ResponseEntity addStocks(int userNumber, String userName, List<Stock> stockList);
 
-    @Post
-    ResponseEntity addBatch(List<People> peoples);
+    @Get("/personal/{USER_ID}/favorite/list")
+    List<Stock> getStockList(String USER_ID);
 
-    @Post
-    ResponseEntity addBatchWithDetails(List<People> peoples, List<String> name, List<Integer> age, long birth);
 }
 ```
 
 * The controller is the bean of spring, you can integrate with spring  
 ```java
 @Controller
-public class PeopleController implements PeopleRestEndPoint {
+public class StockInfoRestController implements StockInfoRest {
 
     @Override
-    public ResponseEntity getAllName() {
-        return ResponseEntity.buildCustomizeResponse(1, "ok", Lists.newArrayList("First", "Second"));
-    }
-    
-    @Override
-    public ResponseEntity getPeople(String name, int age) {
-        return ResponseEntity.buildOkResponse(new People(name, age));
+    public void addFavorite(String USER_ID, String CODE, long time) {
+        System.out.println(USER_ID + " " + CODE + " " + time);
     }
 
     @Override
-    public ResponseEntity addPeople(People people) {
-        return ResponseEntity.buildOkResponse(people);
+    public ResponseEntity addStocks(int userNumber, String userName, List<Stock> stockList) {
+        return ResponseEntity.buildOkResponse(Lists.asList(userNumber, userName, new List[]{stockList}));
     }
 
     @Override
-    public ResponseEntity addBatch(List<People> peoples) {
-        return ResponseEntity.buildOkResponse(peoples);
-    }
-
-    @Override
-    public ResponseEntity addBatchWithDetails(List<People> peoples, List<String> name, List<Integer> age, long birth) {
-        return ResponseEntity.buildOkResponse(Lists.newArrayList(peoples, name, age, birth));
+    public List<Stock> getStockList(String USER_ID) {
+        return Lists.newArrayList(new Stock(100000, "stock1"), new Stock(100001, "stock2"), new Stock(100002, "stock3"));
     }
 }
 ```
@@ -66,17 +51,31 @@ public class PeopleController implements PeopleRestEndPoint {
 public class Example {
 
     public static void main(String[] args) {
-        EasyRest easyRest = new EasyRest();
-        easyRest.registerServiceAndStartup(PeopleRestEndPoint.class);
+        EasyRest easyRest = new EasyRest("classpath:MyExampleApplicationContext.xml");
+        easyRest.registerServiceAndStartup("EasyRestServer", StockInfoRest.class);
     }
 
 }
 ```
 
-####
-* @BindURL({"/people"}) will bind this endpoint at "/people"
+* An empty spring config file
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:annotation-config/>
+    <context:component-scan base-package="com.example">
+    </context:component-scan>
+    <context:annotation-config/>
+</beans>
+```
 
-* @BindController(PeopleController.class) to tell the framwork which controller should use.
+####
+* @BindURL("/rest/{TENANT}/stock") will bind this endpoint at "/rest/{TENANT}/stock"
+
+* @BindController(StockInfoRestController.class) to tell the framework which controller should use.
 
 * @Controller is spring annotation, that will create bean by spring.
 
@@ -84,139 +83,9 @@ public class Example {
 
 * If you have own spring properties, you can create EasyRest by
 ```java
-EasyRest easyRest = new EasyRest("classpath:applicationContext.xml", "classpath:applicationContext-01.xml"...);
+EasyRest easyRest = new EasyRest("classpath:MyApplicationContext-01.xml", "classpath:MyApplicationContext-02.xml"...);
 ```
-* Register your method to the EasyRest 
+* Register your interface to the EasyRest 
 ```java
-easyRest.registerServiceAndStartup(PeopleRestEndPoint.class...);
-```
 
-***
-#### For the methd 
-```java
-@Get
-ResponseEntity getAllName();
-```
-You can call it at 
-```java
-GET http://hostname:port/people/getAllName
-```
-And the response is:
-```java
-{
-    "code": "1",
-    "message": "ok",
-    "data": [
-        "First",
-        "Second"
-    ]
-}
-```
-
-***
-#### For the methd 
-```java
-@Post
-ResponseEntity addPeople(People people);
-```
-The People class is:
-```java
-public class People {
-
-    private String name;
-
-    private int age;
-
-    public People(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-    
-}
-```
-You can call it at 
-```java
-POST http://hostname:port/people/addPeople
-Content Type should be 'application/json'
-Body: {"name":"Louie", "age":"24"}
-```
-And the response is:
-```java
-{
-    "code": "1",
-    "data": {
-        "name": "Louie",
-        "age": 24
-    }
-}
-```
-
-***
-#### For the methd 
-```java
-@Post
-ResponseEntity addBatch(List<People> peoples);
-```
-You can call it at 
-```java
-POST http://hostname:port/people/addBatch
-Content Type should be 'application/json'
-Body: [{"name":"Louie1", "age":"20"},{"name":"Louie2", "age":"21"}]
-```
-And the response is:
-```java
-{
-    "code": "1",
-    "data": [
-        {
-            "name": "Louie1",
-            "age": 20
-        },
-        {
-            "name": "Louie2",
-            "age": 21
-        }
-    ]
-}
-```
-
-***
-#### For the methd 
-```java
-@Post
-ResponseEntity addBatchWithDetails(List<People> peoples, List<String> name, List<Integer> age, long birth);
-```
-You can call it at 
-```java
-POST http://hostname:port/people/addBatch
-Content Type should be 'application/json'
-Body: {"peoples":[{"name":"Louie", "age":"20"},{"name":"Louie", "age":"20"}], "name":["name1", "name2", "name3"], "age":[17,28], "birth":19930201}
-```
-And the response is:
-```java
-{
-    "code": "1",
-    "data": [
-        [
-            {
-                "name": "Louie",
-                "age": 20
-            },
-            {
-                "name": "Louie",
-                "age": 20
-            }
-        ],
-        [
-            "name1",
-            "name2",
-            "name3"
-        ],
-        [
-            17,
-            28
-        ],
-        19930201
-    ]
-}
 ```

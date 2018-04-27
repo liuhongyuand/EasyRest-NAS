@@ -20,13 +20,14 @@ public class ControllerInvokeActor extends AbstractActor {
             try {
                 Method method = httpEntity.getMethod();
                 Class<?> controller = httpEntity.getController();
-                ResponseEntity responseEntity;
-                if (httpEntity.getArgs().length > 0){
-                    responseEntity = (ResponseEntity) method.invoke(BeanOperationUtils.getBean(controller), httpEntity.getArgs());
+                if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())){
+                    invokeMethod(method, controller, httpEntity.getArgs());
+                    httpEntity.setResponseEntity(ResponseEntity.buildOkResponse());
+                } else if (method.getReturnType().equals(ResponseEntity.class)){
+                    httpEntity.setResponseEntity((ResponseEntity) invokeMethod(method, controller, httpEntity.getArgs()));
                 } else {
-                    responseEntity = (ResponseEntity) method.invoke(BeanOperationUtils.getBean(controller));
+                    httpEntity.setResponseEntity(ResponseEntity.buildBaseResponse(invokeMethod(method, controller, httpEntity.getArgs())));
                 }
-                httpEntity.setResponseEntity(responseEntity);
                 ActorFactory.createActor(ResponseProcessActor.class).tell(httpEntity, ActorRef.noSender());
             } catch (Exception e) {
                 LogUtils.error(e.getMessage(), e);
@@ -34,6 +35,14 @@ public class ControllerInvokeActor extends AbstractActor {
                 ActorFactory.createActor(ExceptionHandleActor.class).tell(httpEntity, ActorRef.noSender());
             }
         })).build();
+    }
+
+    private Object invokeMethod(Method method, Class<?> controller, Object[] args) throws Exception{
+            if (args.length > 0) {
+                return method.invoke(BeanOperationUtils.getBean(controller), args);
+            } else {
+                return method.invoke(BeanOperationUtils.getBean(controller));
+            }
     }
 
 }

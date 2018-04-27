@@ -3,18 +3,24 @@ package com.example.rest;
 import com.easyrest.annotations.bean.BindController;
 import com.easyrest.annotations.method.BindURL;
 import com.easyrest.annotations.method.Get;
-import com.easyrest.annotations.parameter.FromPath;
+import com.easyrest.annotations.method.Post;
 import com.easyrest.model.ResponseEntity;
 import com.example.controller.StockInfoRestController;
+import com.example.model.Stock;
+
+import java.util.List;
 
 @BindURL("/rest/{TENANT}/stock")
 @BindController(StockInfoRestController.class)
 public interface StockInfoRest {
 
-    @Get("/favorite/{ID}/info")
-    ResponseEntity getStockInfo(@FromPath String ID);
+    @Post("/personal/{USER_ID}/favorite/{CODE}")
+    void addFavorite(String USER_ID, String CODE, long time);
 
-    @Get("/favorite/stocks")
-    ResponseEntity getStockList();
+    @Post
+    ResponseEntity addStocks(int userNumber, String userName, List<Stock> stockList);
+
+    @Get("/personal/{USER_ID}/favorite/list")
+    List<Stock> getStockList(String USER_ID);
 
 }

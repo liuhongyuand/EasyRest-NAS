@@ -35,6 +35,10 @@ public class EasyRest {
         registerServiceAndStartup(NettyInit.SystemName, new NettyInit(), requestModels);
     }
 
+    public void registerServiceAndStartup(String systemName, Class... requestModels) {
+        registerServiceAndStartup(systemName, new NettyInit(), requestModels);
+    }
+
     public void registerServiceAndStartup(String SystemName, NettyInit nettyInit, Class... requestModels) {
         this.systemName = SystemName;
         this.nettyInit = nettyInit;

@@ -12,7 +12,7 @@ public class JsonDataResolve {
     private static final Gson GSON = new Gson();
 
     public static Object[] resolveArgs(HttpEntity httpEntity){
-        RestObject restObject = RouterProvider.getRestObjectMap().get(httpEntity.getRequest().getRequestUri());
+        RestObject restObject = RouterProvider.getRestObject(httpEntity.getRequest().getRequestUri());
         Object[] args = new Object[restObject.getParameterTypeMap().size()];
         final int[] index = {0};
         if (args.length > 1){
