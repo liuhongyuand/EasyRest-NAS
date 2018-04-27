@@ -13,7 +13,7 @@ Quick start:
 public interface StockInfoRest {
 
     @Post("/personal/{USER_ID}/favorite/{CODE}")
-    void addFavorite(String USER_ID, String CODE, long time);
+    void addFavorite(String TENANT, String USER_ID, String CODE, long time);
 
     @Post
     ResponseEntity addStocks(int userNumber, String userName, List<Stock> stockList);
@@ -30,8 +30,8 @@ public interface StockInfoRest {
 public class StockInfoRestController implements StockInfoRest {
 
     @Override
-    public void addFavorite(String USER_ID, String CODE, long time) {
-        System.out.println(USER_ID + " " + CODE + " " + time);
+    public void addFavorite(String TENANT, String USER_ID, String CODE, long time) {
+        System.out.println(TENANT + " " + USER_ID + " " + CODE + " " + time);
     }
 
     @Override
@@ -87,5 +87,99 @@ EasyRest easyRest = new EasyRest("classpath:MyApplicationContext-01.xml", "class
 ```
 * Register your interface to the EasyRest 
 ```java
-
+easyRest.registerServiceAndStartup("EasyRestServer", StockInfoRest.class, ...);
 ```
+
+***
+### REST CALL EXAMPLE
+* Methd 1
+```java
+@Post("/personal/{USER_ID}/favorite/{CODE}")
+void addFavorite(String TENANT, String USER_ID, String CODE, long time);
+```
+Call it at:
+> http://127.0.0.1:8080/rest/100000001/stock/personal/001/favorite/100001
+
+Content-Type is 'application/json'
+
+POST body is:
+```json
+{"time":1524827542}
+```
+
+The output is:
+```java
+100000001 001 100001 1524827542
+```
+
+And the response is:
+```java
+{
+    "code": "1",
+    "message": "ok"
+}
+```
+***
+* Methd 2
+```java
+@Post
+ResponseEntity addStocks(int userNumber, String userName, List<Stock> stockList);
+```
+Call it at:
+> http://127.0.0.1:8080/rest/100000001/stock/addStocks
+
+Content-Type is 'application/json'
+
+POST body is:
+```json
+{"userNumber":1, "userName":"Louie", "stockList":[{"code":100001, "name":"stock1"}, {"code":100002, "name":"stock2"}]}
+```
+
+And the response is:
+```java
+{
+    "code": "1",
+    "data": [
+        1,
+        "Louie",
+        [
+            {
+                "code": 100001,
+                "name": "stock1"
+            },
+            {
+                "code": 100002,
+                "name": "stock2"
+            }
+        ]
+    ]
+}
+```***
+* Methd 3
+```java
+@Get("/personal/{USER_ID}/favorite/list")
+List<Stock> getStockList(String USER_ID);
+```
+Call it at:
+> http://127.0.0.1:8080/rest/100000001/stock/personal/001/favorite/list
+
+And the response is:
+```java
+[
+    {
+        "code": 100000,
+        "name": "stock1"
+    },
+    {
+        "code": 100001,
+        "name": "stock2"
+    },
+    {
+        "code": 100002,
+        "name": "stock3"
+    }
+]
+```
+* For the content type, 'multipart/form-data' is also supported.
+***
+* Not the end
