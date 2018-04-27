@@ -7,7 +7,7 @@ import com.easyrest.network.router.RouterProvider;
 public class FormDataResolve {
 
     public static Object[] resolveArgs(HttpEntity httpEntity){
-        RestObject restObject = RouterProvider.getRestObjectMap().get(httpEntity.getRequest().getRequestUri());
+        RestObject restObject = RouterProvider.getRestObject(httpEntity.getRequest().getRequestUri());
         Object[] args = new Object[restObject.getParameterTypeMap().size()];
         final int[] index = {0};
         restObject.getParameterTypeMap().forEach((name, type) -> {

@@ -4,6 +4,7 @@ import com.easyrest.annotations.bean.BindController;
 import com.easyrest.annotations.method.BindURL;
 import com.easyrest.annotations.method.Get;
 import com.easyrest.annotations.method.Post;
+import com.easyrest.annotations.parameter.AllDefined;
 import com.easyrest.model.ResponseEntity;
 import com.example.controller.StockInfoRestController;
 import com.example.model.Stock;
@@ -18,6 +19,7 @@ public interface StockInfoRest {
     void addFavorite(String TENANT, String USER_ID, String CODE, long time);
 
     @Post
+    @AllDefined
     ResponseEntity addStocks(int userNumber, String userName, List<Stock> stockList);
 
     @Get("/personal/{USER_ID}/favorite/list")
