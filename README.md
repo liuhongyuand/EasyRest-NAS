@@ -154,7 +154,8 @@ And the response is:
         ]
     ]
 }
-```***
+```
+***
 * Methd 3
 ```java
 @Get("/personal/{USER_ID}/favorite/list")
