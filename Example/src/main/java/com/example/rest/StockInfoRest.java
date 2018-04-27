@@ -15,7 +15,7 @@ import java.util.List;
 public interface StockInfoRest {
 
     @Post("/personal/{USER_ID}/favorite/{CODE}")
-    void addFavorite(String USER_ID, String CODE, long time);
+    void addFavorite(String TENANT, String USER_ID, String CODE, long time);
 
     @Post
     ResponseEntity addStocks(int userNumber, String userName, List<Stock> stockList);

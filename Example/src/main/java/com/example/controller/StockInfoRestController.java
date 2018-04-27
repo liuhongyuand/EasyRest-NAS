@@ -12,8 +12,8 @@ import java.util.List;
 public class StockInfoRestController implements StockInfoRest {
 
     @Override
-    public void addFavorite(String USER_ID, String CODE, long time) {
-        System.out.println(USER_ID + " " + CODE + " " + time);
+    public void addFavorite(String TENANT, String USER_ID, String CODE, long time) {
+        System.out.println(TENANT + " " + USER_ID + " " + CODE + " " + time);
     }
 
     @Override
