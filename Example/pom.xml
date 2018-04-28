@@ -6,7 +6,12 @@
 
     <groupId>EasyRest</groupId>
     <artifactId>EasyRest-example</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
+    <modules>
+        <module>Example-Service-1</module>
+        <module>Example-Service-2</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>EasyRest</groupId>

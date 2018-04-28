@@ -1,9 +1,11 @@
 package com.easyrest.model;
 
+import java.io.Serializable;
+
 /**
- * Created by SEELE on 2016/10/2.
+ * Created by Louie on 2016/10/2.
  */
-public class ResponseEntity<T>  {
+public class ResponseEntity<T> implements Serializable {
     private String code = "1";
     private String message;
     private T data;

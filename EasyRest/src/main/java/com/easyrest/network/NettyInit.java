@@ -44,6 +44,12 @@ public class NettyInit implements BaseConfiguration {
     private ChannelFuture channelFuture;
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyInit.class);
 
+    public NettyInit(){}
+
+    public NettyInit(int port){
+        setPort(port);
+    }
+
     public ServerBootstrap build(){
         return build(SystemName);
     }

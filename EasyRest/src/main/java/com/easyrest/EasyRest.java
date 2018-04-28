@@ -2,7 +2,7 @@ package com.easyrest;
 
 import akka.actor.ActorRef;
 import com.easyrest.actors.ActorFactory;
-import com.easyrest.actors.BindModelActor;
+import com.easyrest.actors.AnalysisMethodActor;
 import com.easyrest.ioc.utils.BeanOperationUtils;
 import com.easyrest.network.NettyInit;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -39,12 +39,16 @@ public class EasyRest {
         registerServiceAndStartup(systemName, new NettyInit(), requestModels);
     }
 
+    public void registerServiceAndStartup(String systemName, int port, Class... requestModels) {
+        registerServiceAndStartup(systemName, new NettyInit(port), requestModels);
+    }
+
     public void registerServiceAndStartup(String SystemName, NettyInit nettyInit, Class... requestModels) {
         this.systemName = SystemName;
         this.nettyInit = nettyInit;
         this.requestModels = requestModels;
         NettyInit.SystemName = systemName;
-        ActorFactory.createActor(BindModelActor.class).tell(this, ActorRef.noSender());
+        ActorFactory.createActor(AnalysisMethodActor.class).tell(this, ActorRef.noSender());
     }
 
     public String getSystemName() {

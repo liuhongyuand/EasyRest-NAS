@@ -9,10 +9,11 @@ public class ExceptionHandleActor extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(HttpEntity.class, (httpEntity -> {
-            httpEntity.getResponse().buildResponse(ResponseEntity.buildFailedResponse(new ErrorResponse(httpEntity.getErrorMap())));
-            httpEntity.getChannelHandlerContext().writeAndFlush(httpEntity.getResponse().getRealResponse());
-        })).build();
+        return receiveBuilder()
+                .match(HttpEntity.class, (httpEntity -> {
+                    httpEntity.getResponse().buildResponse(ResponseEntity.buildFailedResponse(new ErrorResponse(httpEntity.getErrorMap())));
+                    httpEntity.getChannelHandlerContext().writeAndFlush(httpEntity.getResponse().getRealResponse());
+                })).build();
     }
 
 }

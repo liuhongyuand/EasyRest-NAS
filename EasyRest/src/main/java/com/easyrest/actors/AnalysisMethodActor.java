@@ -3,6 +3,7 @@ package com.easyrest.actors;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import com.easyrest.EasyRest;
+import com.easyrest.actors.remote.conf.EasyRestDistributedServiceBind;
 import com.easyrest.annotations.bean.BindController;
 import com.easyrest.annotations.method.*;
 import com.easyrest.network.NettyLaunch;
@@ -13,11 +14,7 @@ import io.netty.handler.codec.http.HttpMethod;
 
 import java.lang.reflect.Method;
 
-public class BindModelActor extends AbstractActor {
-
-    private static final Class[] HTTP_METHOD_ANNOTATIONS = {Get.class, Post.class, Put.class, Delete.class};
-
-    private static final HttpMethod[] HTTP_METHODS = {HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE};
+public class AnalysisMethodActor extends AbstractActor {
 
     @Override
     public Receive createReceive() {
@@ -56,6 +53,7 @@ public class BindModelActor extends AbstractActor {
                     RouterProvider.methodRouterResolve(restUri, method.getName(), method.getAnnotation(Delete.class).value(), HttpMethod.DELETE, method, controller);
                 }
             }
+            EasyRestDistributedServiceBind.addService(requestModel);
         }
         ActorFactory.createActor(NettyLaunch.class).tell(easyRest, ActorRef.noSender());
     }

@@ -1,0 +1,19 @@
+{
+  "self": {
+    "akkaSystemName": "example-service-1",
+    "host": "127.0.0.1",
+    "port": "2551"
+  },
+  "services" : [
+    {
+      "akkaSystemName": "example-service-1",
+      "host": "127.0.0.1",
+      "port": "2551"
+    },
+    {
+      "akkaSystemName": "example-service-2",
+      "host": "127.0.0.1",
+      "port": "2552"
+    }
+  ]
+}
