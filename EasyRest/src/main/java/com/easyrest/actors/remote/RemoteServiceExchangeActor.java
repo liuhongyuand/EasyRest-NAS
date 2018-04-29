@@ -4,7 +4,7 @@ import akka.actor.AbstractActor;
 import com.easyrest.actors.remote.conf.EasyRestDistributedServiceBind;
 import com.easyrest.utils.LogUtils;
 
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +22,7 @@ public class RemoteServiceExchangeActor extends AbstractActor {
                     .forEach((serviceInfo -> {
                         Thread askThread = new Thread(() -> {
                             Object result = RemoteRequestUtil.getServiceExchanged(serviceInfo.getAkkaSystemName(), serviceInfo.getHost(), serviceInfo.getPort(), RemoteServiceExchangeActor.class);
-                            while (!(result instanceof List<?>)) {
+                            while (!(result instanceof Set<?>)) {
                                 try {
                                     Thread.sleep(500);
                                     result = RemoteRequestUtil.getServiceExchanged(serviceInfo.getAkkaSystemName(), serviceInfo.getHost(), serviceInfo.getPort(), RemoteServiceExchangeActor.class);
@@ -30,7 +30,7 @@ public class RemoteServiceExchangeActor extends AbstractActor {
                                     e.printStackTrace();
                                 }
                             }
-                            ((List<?>) result).forEach((service) -> EasyRestDistributedServiceBind.getServiceInfoMap().putIfAbsent(String.valueOf(service), serviceInfo));
+                            ((Set<?>) result).forEach((service) -> EasyRestDistributedServiceBind.getServiceInfoMap().putIfAbsent(String.valueOf(service), serviceInfo));
                             countDownLatch.countDown();
                         });
                         executors.execute(askThread);

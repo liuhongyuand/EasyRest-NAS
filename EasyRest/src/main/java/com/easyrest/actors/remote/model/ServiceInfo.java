@@ -1,4 +1,4 @@
-package com.easyrest.actors.remote.conf;
+package com.easyrest.actors.remote.model;
 
 public class ServiceInfo {
 

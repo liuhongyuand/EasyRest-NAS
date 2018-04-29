@@ -1,5 +1,7 @@
 package com.easyrest.actors.remote.conf;
 
+import com.easyrest.actors.remote.model.ServiceInfo;
+
 import java.util.List;
 
 public class ServiceMapping {

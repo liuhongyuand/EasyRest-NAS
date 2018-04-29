@@ -80,8 +80,4 @@ public class RouterProvider {
         RouterProvider.registerUrl(url.toString(), httpMethod, restObject);
     }
 
-    public static void main(String[] args) {
-        registerUrl("/rest/{id}/info/{name}", HttpMethod.GET, null);
-    }
-
 }

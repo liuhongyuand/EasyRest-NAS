@@ -5,11 +5,19 @@ import com.easyrest.model.request.RestObject;
 import com.easyrest.network.router.RouterProvider;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 public class JsonDataResolve {
 
     private static final Gson GSON = new Gson();
+
+    public static Object[] resolveArgs(Type[] genericParameterTypes, Object[] args){
+        for (int i = 0; i < args.length; i++) {
+            args[i] = GSON.fromJson((String) args[i], genericParameterTypes[i]);
+        }
+        return args;
+    }
 
     public static Object[] resolveArgs(HttpEntity httpEntity){
         RestObject restObject = RouterProvider.getRestObject(httpEntity.getRequest().getRequestUri());

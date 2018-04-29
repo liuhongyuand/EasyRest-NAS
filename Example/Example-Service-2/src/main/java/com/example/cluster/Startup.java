@@ -13,7 +13,7 @@ public class Startup {
         EasyRestAkkaConf.REMOTE_PORT = 2552;
         EasyRestDistributedServiceBind.loadConfiguration(Startup.class.getClassLoader().getResourceAsStream("services-mapping-02.json"));
         EasyRest easyRest = new EasyRest("classpath:MyExampleApplicationContext-02.xml");
-        easyRest.registerServiceAndStartup("example-service-2", new NettyInit(8002), Service2.class);
+        easyRest.startup("example-service-2", new NettyInit(8002));
     }
 
 }

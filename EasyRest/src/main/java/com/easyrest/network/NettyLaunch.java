@@ -17,7 +17,9 @@ public class NettyLaunch extends AbstractActor {
                 throw new ConfigurationException(String.format("%s can not be null.", NettyInit.class.getName()));
             }
             EasyRestDistributedServiceBind.setInitFinished(true);
-            RemoteServiceExchangeActor.initServiceMap();
+            if (EasyRestDistributedServiceBind.isIsNeedDistributed()) {
+                RemoteServiceExchangeActor.initServiceMap();
+            }
             LogUtils.info(String.format("%s is running on the port %s.", easyRest.getSystemName(), easyRest.getNettyInit().getPort()));
             ServerBootstrap bootstrap = easyRest.getNettyInit().build(easyRest.getSystemName());
             easyRest.getNettyInit().bindChannelFuture(bootstrap.bind(easyRest.getNettyInit().getPort()));

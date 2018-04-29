@@ -4,6 +4,7 @@ import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import com.easyrest.actors.ActorFactory;
 import com.easyrest.actors.ExceptionHandleActor;
+import com.easyrest.actors.remote.model.RemoteInvokeObject;
 import com.easyrest.aop.StaticAopStepUtil;
 import com.easyrest.model.HttpEntity;
 import com.easyrest.utils.LogUtils;
@@ -29,7 +30,7 @@ public class ResponseProcessActor extends AbstractActor {
             } else {
                 ActorFactory.createActor(ExceptionHandleActor.class).tell(httpEntityTemp[0], ActorRef.noSender());
             }
-        })).build();
+        })).match(RemoteInvokeObject.class, (remoteInvokeObject -> ActorFactory.createActor(OutputActor.class).tell(remoteInvokeObject, ActorRef.noSender()))).build();
     }
 
 }

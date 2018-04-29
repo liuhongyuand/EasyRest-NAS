@@ -4,15 +4,16 @@ import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import com.easyrest.EasyRest;
 import com.easyrest.actors.remote.conf.EasyRestDistributedServiceBind;
-import com.easyrest.annotations.bean.BindController;
 import com.easyrest.annotations.method.*;
+import com.easyrest.ioc.utils.BeanOperationUtils;
 import com.easyrest.network.NettyLaunch;
 import com.easyrest.network.exception.ConfigurationException;
 import com.easyrest.network.router.RouterProvider;
-import com.easyrest.utils.LogUtils;
 import io.netty.handler.codec.http.HttpMethod;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnalysisMethodActor extends AbstractActor {
 
@@ -22,18 +23,22 @@ public class AnalysisMethodActor extends AbstractActor {
     }
 
     private void analysisRestObject(EasyRest easyRest) {
-        for (Class requestModel : easyRest.getRequestModels()) {
+        List<Class> easyRestClass = new ArrayList<>();
+        BeanOperationUtils.getAllBeansClass().forEach((aClass -> {
+            for (Class _interface : aClass.getInterfaces()){
+                if (_interface.isAnnotationPresent(BindURL.class)){
+                    easyRestClass.add(_interface);
+                }
+            }
+        }));
+        for (Class<?> requestModel : easyRestClass) {
             if (!requestModel.isInterface()) {
                 throw new ConfigurationException("Only interface can be registered.");
             }
-            if (!requestModel.isAnnotationPresent(BindController.class)) {
-                LogUtils.error(requestModel.getSimpleName() + " controller is missing", new ConfigurationException(requestModel.getSimpleName() + " controller is missing"));
-                continue;
-            }
-            Class controller = ((BindController) requestModel.getAnnotation(BindController.class)).value();
+            Class controller = BeanOperationUtils.getBeansFromInterface(requestModel).getClass();
             StringBuffer[] restUri = new StringBuffer[1];
             if (requestModel.isAnnotationPresent(BindURL.class)) {
-                String[] uris = ((BindURL) requestModel.getAnnotation(BindURL.class)).value();
+                String[] uris = requestModel.getAnnotation(BindURL.class).value();
                 restUri = new StringBuffer[uris.length];
                 for (int i = 0; i < restUri.length; i++) {
                     restUri[i] = new StringBuffer(uris[i]);
@@ -53,7 +58,7 @@ public class AnalysisMethodActor extends AbstractActor {
                     RouterProvider.methodRouterResolve(restUri, method.getName(), method.getAnnotation(Delete.class).value(), HttpMethod.DELETE, method, controller);
                 }
             }
-            EasyRestDistributedServiceBind.addService(requestModel);
+            EasyRestDistributedServiceBind.addService(requestModel, controller);
         }
         ActorFactory.createActor(NettyLaunch.class).tell(easyRest, ActorRef.noSender());
     }

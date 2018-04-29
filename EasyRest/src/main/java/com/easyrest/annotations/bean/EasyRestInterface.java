@@ -8,8 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Created by liuhongyu.louie on 2017/4/4.
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface BindController {
-    Class<?> value();
+public @interface EasyRestInterface {
 }

@@ -4,6 +4,8 @@ import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import com.easyrest.actors.ActorFactory;
 import com.easyrest.actors.ExceptionHandleActor;
+import com.easyrest.actors.Signal;
+import com.easyrest.actors.remote.model.RemoteInvokeObject;
 import com.easyrest.actors.response.ResponseProcessActor;
 import com.easyrest.ioc.utils.BeanOperationUtils;
 import com.easyrest.model.HttpEntity;
@@ -33,6 +35,15 @@ public class ControllerInvokeActor extends AbstractActor {
                 LogUtils.error(e.getMessage(), e);
                 httpEntity.addError(e);
                 ActorFactory.createActor(ExceptionHandleActor.class).tell(httpEntity, ActorRef.noSender());
+            }
+        })).match(RemoteInvokeObject.class, (remoteInvokeObject -> {
+            try {
+                Object result = invokeMethod(remoteInvokeObject.getMethod(), remoteInvokeObject.getImplClass(), remoteInvokeObject.getArgs());
+                remoteInvokeObject.setResult(result);
+                ActorFactory.createActor(ResponseProcessActor.class).tell(remoteInvokeObject, ActorRef.noSender());
+            } catch (Exception e){
+                LogUtils.error(e.getMessage(), e);
+                remoteInvokeObject.getSender().tell(Signal.getFailedMessage(e.getMessage()), remoteInvokeObject.getSender());
             }
         })).build();
     }

@@ -1,8 +1,10 @@
 package com.easyrest.actors.response;
 
 import akka.actor.AbstractActor;
+import com.easyrest.actors.remote.model.RemoteInvokeObject;
 import com.easyrest.model.HttpEntity;
 import com.easyrest.model.ResponseEntity;
+import com.easyrest.utils.JsonTranslationUtil;
 
 public class OutputActor extends AbstractActor {
     @Override
@@ -15,6 +17,6 @@ public class OutputActor extends AbstractActor {
                 httpEntity.getResponse().buildResponse(httpEntity.getResponseEntity().getData());
             }
             httpEntity.getChannelHandlerContext().writeAndFlush(httpEntity.getResponse().getRealResponse());
-        })).build();
+        })).match(RemoteInvokeObject.class, (remoteInvokeObject -> remoteInvokeObject.getSender().tell(JsonTranslationUtil.toJsonString(remoteInvokeObject.getResult()), remoteInvokeObject.getSender()))).build();
     }
 }

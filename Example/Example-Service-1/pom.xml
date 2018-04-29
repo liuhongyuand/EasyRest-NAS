@@ -10,6 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Example-Service-1</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>example-service-1-api</module>
+        <module>example-service-1-main</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>EasyRest</groupId>

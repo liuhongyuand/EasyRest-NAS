@@ -13,8 +13,6 @@ public class EasyRest {
 
     private NettyInit nettyInit;
 
-    private Class[] requestModels;
-
     public EasyRest() {
         BeanOperationUtils.setApplicationContext(new ClassPathXmlApplicationContext("classpath:easyrest-applicationContext-01.xml"));
     }
@@ -31,22 +29,21 @@ public class EasyRest {
         BeanOperationUtils.setApplicationContext(new ClassPathXmlApplicationContext(xmls));
     }
 
-    public void registerServiceAndStartup(Class... requestModels) {
-        registerServiceAndStartup(NettyInit.SystemName, new NettyInit(), requestModels);
+    public void startup() {
+        startup(NettyInit.SystemName, new NettyInit());
     }
 
-    public void registerServiceAndStartup(String systemName, Class... requestModels) {
-        registerServiceAndStartup(systemName, new NettyInit(), requestModels);
+    public void startup(String systemName) {
+        startup(systemName, new NettyInit());
     }
 
-    public void registerServiceAndStartup(String systemName, int port, Class... requestModels) {
-        registerServiceAndStartup(systemName, new NettyInit(port), requestModels);
+    public void startup(String systemName, int port) {
+        startup(systemName, new NettyInit(port));
     }
 
-    public void registerServiceAndStartup(String SystemName, NettyInit nettyInit, Class... requestModels) {
+    public void startup(String SystemName, NettyInit nettyInit) {
         this.systemName = SystemName;
         this.nettyInit = nettyInit;
-        this.requestModels = requestModels;
         NettyInit.SystemName = systemName;
         ActorFactory.createActor(AnalysisMethodActor.class).tell(this, ActorRef.noSender());
     }
@@ -59,7 +56,4 @@ public class EasyRest {
         return nettyInit;
     }
 
-    public Class[] getRequestModels() {
-        return requestModels;
-    }
 }

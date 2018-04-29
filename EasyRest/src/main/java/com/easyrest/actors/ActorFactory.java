@@ -17,6 +17,10 @@ public class ActorFactory {
         createActorWithName(RemoteServiceExchangeActor.class);
     }
 
+    public static ActorSystem getActorSystem() {
+        return ACTOR_SYSTEM;
+    }
+
     public static ActorRef createActor(Class target){
         return ACTOR_SYSTEM.actorOf(Props.create(target));
     }
