@@ -1,12 +1,12 @@
 # EasyRest-NAS
 
-### EasyRest integration with Netty, Akka and Spring.
+### EasyRest 与 Netty, Akka 和 Spring 的整合.
 
-* ##### This is the high performance RESTful framework, designed for the fast development. Easy to cluster and distributed. You can focus on your business logic.
+* ##### 这是一个为快速开发而设计的高性能RESTful框架，极易搭建集群和使用分布式。你可以完全专注在你的业务逻辑上。 
 
 ## Quick start:
 
-* The rest definition
+* REST接口定义
 
 ```java
 @BindURL("/rest/{TENANT}/stock")
@@ -24,7 +24,7 @@ public interface StockInfoRest {
 }
 ```
 
-* The controller is the bean of spring, you can integrate with spring  
+* 使用@controller注解，将该类交给Spring生成bean并管理，该框架可以和spring无缝对接使用。  
 
 ```java
 @Controller
@@ -48,7 +48,7 @@ public class StockInfoRestController implements StockInfoRest {
 }
 ```
 
-* The main class.
+* 主函数类，用于启动以及配置。
 
 ```java
 public class Example {
@@ -61,7 +61,7 @@ public class Example {
 }
 ```
 
-* An empty spring config file
+* 一个基础的spring配置文件
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -78,21 +78,21 @@ public class Example {
 
 ***
 
-* <B>@BindURL("/rest/{TENANT}/stock")</B> will bind this endpoint at "/rest/{TENANT}/stock"
+* <B>@BindURL("/rest/{TENANT}/stock")</B> 会绑定该类监听 "/rest/{TENANT}/stock" 路径的请求。
 
-* <B>@AllDefined</B> will check all parameters not be null, if any parameter is null, the framework will reject the request directly. 
+* <B>@AllDefined</B> 会要求该方法所有的参数在请求中都被赋予非空值，如果检测到有null，框架将会直接拒绝这个请求。可以减少用户的空值判断。
 
-* <B>@Controller</B> is spring annotation, that will create bean by spring.
+* <B>@Controller</B> 这个是spring的annotation，将交给spring生成bean并管理。
 
-* <B>ResponseEntity</B> is the generic response entity, you can put any thing you want in it.
+* <B>ResponseEntity</B> 是一个通用的返回格式，你能将所有格式的数据放进去。（你也可以不使用这个，直接返回任何你想返回的格式）
 
-* If you have own spring properties, you can create EasyRest by
+* 如果你有很多其他的spring配置文件，你可以这样启动EasyRest：
 
 ```java
 EasyRest easyRest = new EasyRest("classpath:MyApplicationContext-01.xml", "classpath:MyApplicationContext-02.xml"...);
 ```
 
-* All over the rest interface will be detected by EasyRest automatically, you just need start the server. 
+* 所有你想暴露的数据接口，EasyRest都会自动检测到，你只需要启动server。
 
 ```java
 easyRest.startup("EasyRestServer");
@@ -100,32 +100,32 @@ easyRest.startup("EasyRestServer");
 
 ***
 
-### REST CALL EXAMPLE
+### 接口调用示例
 
-* Methd 1
+* 函数 1
 
 ```java
 @Post("/personal/{USER_ID}/favorite/{CODE}")
 void addFavorite(String TENANT, String USER_ID, String CODE, long time);
 ```
-Call it at:
+调用地址:
 > http://127.0.0.1:8080/rest/100000001/stock/personal/001/favorite/100001
 
 Content-Type is 'application/json'
 
-POST body is:
+请求内容:
 
 ```json
 {"time":1524827542}
 ```
 
-The output is:
+控制台输出:
 
 ```java
 100000001 001 100001 1524827542
 ```
 
-And the response is:
+收到的响应内容:
 
 ```java
 {
@@ -136,7 +136,7 @@ And the response is:
 
 ***
 
-* Methd 2
+* 函数 2
 
 ```java
 @Post
@@ -144,18 +144,18 @@ And the response is:
 ResponseEntity addStocks(int userNumber, String userName, List<Stock> stockList);
 ```
 
-Call it at:
+调用地址:
 > http://127.0.0.1:8080/rest/100000001/stock/addStocks
 
 Content-Type is 'application/json'
 
-POST body is:
+请求内容:
 
 ```json
 {"userNumber":1, "userName":"Louie", "stockList":[{"code":100001, "name":"stock1"}, {"code":100002, "name":"stock2"}]}
 ```
 
-And the response is:
+响应内容:
 
 ```java
 {
@@ -177,8 +177,7 @@ And the response is:
 }
 ```
 
-The method has annotation <B>@AllDefined</B>, so if any one of the parameter is missing, e.g. "userName".
-The response will be:
+这个函数有一个 <B>@AllDefined</B> 的注解，所以如果任何参数的值为null，比如：“UserName”，那么响应结果将会如下：
 
 ```java
 {
@@ -193,17 +192,17 @@ The response will be:
 
 ***
 
-* Methd 3
+* 函数 3
 
 ```java
 @Get("/personal/{USER_ID}/favorite/list")
 List<Stock> getStockList(String USER_ID);
 ```
 
-Call it at:
+调用地址:
 > http://127.0.0.1:8080/rest/100000001/stock/personal/001/favorite/list
 
-And the response is:
+响应内容:
 
 ```java
 [
@@ -224,14 +223,15 @@ And the response is:
 
 ***
 
-* For the content type, 'multipart/form-data' is also supported.
+* 对于 content type, 'multipart/form-data' 也是支持的.
 
-* Distributed is supported and very easily.
+* 框架支持分布式服务，并且十分容易搭建.
 
-## Distribute service example
+## 分布式服务示例
 
-### All of the code are in the Example module.
+### 所有的代码都在 Example 的模块中 
 
+#### 代码结构
 
 	- Example-Distributed-Service-1
 	
@@ -249,12 +249,11 @@ And the response is:
 
 	- Example-Distributed-Service-Model
 	
-
-> Example-Distributed-Service-1 will get request from the rest call, then will invoke Example-Distributed-Service-2 to create a People and response the rest call with this People. 
+> Example-Distributed-Service-1 会收到请求，然后会调用 Example-Distributed-Service-2 的服务去创建一个 People，然后将这个 People 做为响应数据返回出去。
 
 #### Example-Distributed-Service-Model
 
-* People class
+* People 类
 
 ```java
 public class People {
@@ -279,7 +278,7 @@ public class People {
 #### Example-Distributed-Service-1
 ##### example-service-1-api
 
-* Interface definition
+* 接口定义
 
 ```java
 @BindURL("/service1")
@@ -294,7 +293,7 @@ public interface Service1 {
 
 ##### example-service-1-main
 
-* Interface Implement
+* 接口实现
 
 ```java
 @Controller
@@ -309,9 +308,9 @@ public class Service1Impl implements Service1 {
 }
 ```
 
-> <B>EasyRestServiceLookup</B> has a static method <B>lookup</B>. You can use this method to get any service instance, even this service on the other server!
+> <B>EasyRestServiceLookup</B> 有一个静态方法 <B>lookup</B>. 你能使用这个函数获得任何交给 EasyRest，或者spring 的bean实例，包括在其他服务器上的实例，你都能直接调用。
 
-* The main class
+* 主函数
 
 ```java
 public class Startup {
@@ -327,9 +326,9 @@ public class Startup {
 }
 ```
 
-> EasyRestDistributedServiceBind.loadConfiguration(Startup.class.getClassLoader().getResourceAsStream("services-mapping-01.json")); will load the service mapping for the framework.
+> EasyRestDistributedServiceBind.loadConfiguration(Startup.class.getClassLoader().getResourceAsStream("services-mapping-01.json")); 将会为框架载入服务映射的关系配置文件。
 
-* akka config file: <B>application.conf</B>
+* akka 配置文件: <B>application.conf</B>
 
 ```java
 akka {
@@ -348,9 +347,9 @@ akka {
 }
 ```
 
-> Akka system will detect this file, and open the port to listening remote request.
+> Akka 系统会检测到这个配置文件，然后在指定的端口监听远程请求。
 
-* Distributed service mapping file:(services-mapping-01.json)
+* 分布式服务映射关系表:(services-mapping-01.json)
 
 ```json
 {
@@ -374,13 +373,13 @@ akka {
 }
 ```
 
-> Service mapping file only need two fields:
-> <B>Self</B> to record local system info.
-> <B>Services</B> is an array to record all system info, including self.
+> 服务映射关系表只需要2个字段:
+> <B>Self</B> 记录本地的服务器信息.
+> <B>Services</B> 是一个数组，记录所有的服务器信息，包括自己本身.
 >
-> <B>The akkaSystemName must be the same with systemName in Main class.</B> 
+> <B>字段 akkaSystemName 的值必须和主函数中 systemName 的值一致！！！</B> 
 
-* An empty spring config file:
+*一个基本的spring配置文件:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -398,7 +397,7 @@ akka {
 #### Example-Distributed-Service-2
 ##### example-service-2-api
 
-* Interface definition
+* 接口定义
 
 ```java
 @BindURL("/service2")
@@ -413,7 +412,7 @@ public interface Service2 {
 
 ##### example-service-2-main
 
-* Interface Implement
+* 接口实现
 
 ```java
 @Controller
@@ -426,7 +425,7 @@ public class Service2Impl implements Service2 {
 }
 ```
 
-* The main class
+* 主函数
 
 ```java
 public class Startup {
@@ -442,7 +441,7 @@ public class Startup {
 }
 ```
 
-* akka config file: <B>application.conf</B>
+* akka 配置文件: <B>application.conf</B>
 
 ```java
 akka {
@@ -461,7 +460,7 @@ akka {
 }
 ```
 
-* Distributed service mapping file:(services-mapping-02.json)
+* 分布式服务映射表:(services-mapping-02.json)
 
 ```json
 {
@@ -485,7 +484,7 @@ akka {
 }
 ```
 
-* An empty spring config file:
+* 一个基本的spring配置文件:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -501,9 +500,9 @@ akka {
 ```
 ***
 
-#### Start Service 1 and Service 2.
+#### 启动 Service 1 和 Service 2.
 
-##### When you see this log on each console:
+##### 当你在两边的控制台分别看到如下的日志:
 
 ```java
 [example-service-1-akka.actor.default-dispatcher-5] INFO com.easyrest.utils.LogUtils - From com.easyrest.actors.remote.RemoteServiceExchangeActor: Service mapping init success.
@@ -515,16 +514,16 @@ akka {
 [example-service-2-akka.actor.default-dispatcher-3] INFO com.easyrest.utils.LogUtils - example-service-2 is running on the port 8002.
 ```
 
-#### That means services are ready now!
+#### 这表示两个service现在已经就绪了!
 
-##### Now, We will invoke the service1 via rest call.
+##### 现在我们将通过rest call调用service1.
 
 > http://127.0.0.1:8001/service1/createPeople
 > Content-Type:application/json
 > Body:
 > {"name":"Louie", "age":18, "birthday":763401600, "skills":["java", "netty", "akka", "spring"], "boss":{"name":"Louie_B", "age":18, "birthday":763401600}}
 
-##### And then we can get response:
+##### 收到的响应内容:
 
 ```java
 {
@@ -551,4 +550,4 @@ akka {
 ### That's work!
 
 ***
-##### Not the end...
+##### 持续跟新...
