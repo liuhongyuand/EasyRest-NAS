@@ -19,7 +19,6 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.net.PortConfig;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
@@ -75,7 +74,7 @@ public class NettyInit implements BaseConfiguration {
     }
 
     public NettyInit setPort(int port){
-        if (port > 0 || port <= PortConfig.getUpper()){
+        if (port > 0 && port <= 65535){
             this.port = port;
         }
         return this;

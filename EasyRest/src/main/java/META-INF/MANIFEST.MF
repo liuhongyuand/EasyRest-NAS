@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Class-Path: spring-webmvc-4.1.6.RELEASE.jar akka-stream_2.12-2.5.12.ja
+ r aopalliance-1.0.jar scala-java8-compat_2.12-0.8.0.jar aeron-driver-
+ 1.7.0.jar guava-19.0.jar agrona-0.9.12.jar spring-expression-4.1.6.RE
+ LEASE.jar akka-remote_2.12-2.5.12.jar spring-context-4.1.6.RELEASE.ja
+ r gson-2.3.1.jar spring-aop-4.1.6.RELEASE.jar slf4j-api-1.7.21.jar sp
+ ring-beans-4.1.6.RELEASE.jar akka-actor_2.12-2.5.12.jar reactive-stre
+ ams-1.0.2.jar config-1.3.2.jar spring-core-4.1.6.RELEASE.jar slf4j-si
+ mple-1.7.21.jar commons-logging-1.2.jar netty-3.10.6.Final.jar log4j-
+ 1.2.17.jar scala-library-2.12.5.jar javassist-3.22.0-GA.jar scala-par
+ ser-combinators_2.12-1.1.0.jar ssl-config-core_2.12-0.2.3.jar akka-pr
+ otobuf_2.12-2.5.12.jar spring-web-4.1.6.RELEASE.jar aeron-client-1.7.
+ 0.jar netty-all-4.1.22.Final.jar akka-cluster_2.12-2.5.12.jar
+

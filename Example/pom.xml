@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>EasyRest</groupId>
-            <artifactId>EasyRest-core</artifactId>
+            <artifactId>EasyRest-NAS-All-In-One</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
