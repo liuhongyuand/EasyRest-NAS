@@ -1,5 +1,8 @@
 # EasyRest-NAS
 
+English doc:
+> https://github.com/liuhongyuand/EasyRest-NAS/blob/master/README.md
+
 ### EasyRest 与 Netty, Akka 和 Spring 的整合.
 
 * ##### 这是一个为快速开发而设计的高性能RESTful框架，极易搭建集群和使用分布式。你可以完全专注在你的业务逻辑上。 

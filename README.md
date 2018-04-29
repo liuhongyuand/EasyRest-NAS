@@ -1,5 +1,8 @@
 # EasyRest-NAS
 
+中文文档地址:
+> https://github.com/liuhongyuand/EasyRest-NAS/blob/master/README-zh.md
+
 ### EasyRest integration with Netty, Akka and Spring.
 
 * ##### This is the high performance RESTful framework, designed for the fast development. Easy to cluster and distributed. You can focus on your business logic.
