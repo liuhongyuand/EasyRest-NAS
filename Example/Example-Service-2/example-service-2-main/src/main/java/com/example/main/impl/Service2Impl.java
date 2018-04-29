@@ -1,5 +1,7 @@
-package com.example.cluster;
+package com.example.main.impl;
 
+import com.example.api.Service2;
+import com.example.model.People;
 import org.springframework.stereotype.Controller;
 
 @Controller

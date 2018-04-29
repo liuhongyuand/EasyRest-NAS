@@ -1,4 +1,4 @@
-package com.example.cluster;
+package com.example.main;
 
 import com.easyrest.EasyRest;
 import com.easyrest.actors.EasyRestAkkaConf;

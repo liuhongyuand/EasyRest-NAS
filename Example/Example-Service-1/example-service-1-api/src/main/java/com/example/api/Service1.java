@@ -1,4 +1,4 @@
-package com.example.cluster;
+package com.example.api;
 
 import com.easyrest.annotations.method.BindURL;
 import com.easyrest.annotations.method.Get;

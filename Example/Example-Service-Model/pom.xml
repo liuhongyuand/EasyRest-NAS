@@ -9,12 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Example-Service-2</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>example-service-2-api</module>
-        <module>example-service-2-main</module>
-    </modules>
-
+    <artifactId>Example-Service-Model</artifactId>
 
 </project>

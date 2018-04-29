@@ -11,6 +11,8 @@
     <modules>
         <module>Example-Service-1</module>
         <module>Example-Service-2</module>
+        <module>Example-Service-Model</module>
+        <module>Example-Quick-Start</module>
     </modules>
     <dependencies>
         <dependency>

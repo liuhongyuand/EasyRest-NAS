@@ -1,4 +1,4 @@
-package com.example.cluster;
+package com.example.model;
 
 public class People {
 

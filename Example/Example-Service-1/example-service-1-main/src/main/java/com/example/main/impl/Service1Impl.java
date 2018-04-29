@@ -1,7 +1,9 @@
-package com.example.cluster;
+package com.example.main.impl;
 
 import com.easyrest.ioc.remote.EasyRestServiceLookup;
 import com.easyrest.model.ResponseEntity;
+import com.example.api.Service1;
+import com.example.api.Service2;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Controller;
 
