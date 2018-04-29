@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Example-Service-1</artifactId>
+    <artifactId>Example-Distributed-Service-1</artifactId>
     <packaging>pom</packaging>
     <modules>
         <module>example-service-1-api</module>
@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>EasyRest</groupId>
-            <artifactId>Example-Service-2</artifactId>
+            <artifactId>Example-Distributed-Service-2</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

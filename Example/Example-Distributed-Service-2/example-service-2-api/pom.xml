@@ -3,13 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>Example-Service-1</artifactId>
+        <artifactId>Example-Distributed-Service-2</artifactId>
         <groupId>EasyRest</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>example-service-1-api</artifactId>
+    <artifactId>example-service-2-api</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>EasyRest</groupId>
+            <artifactId>Example-Distributed-Service-Model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 
 </project>
