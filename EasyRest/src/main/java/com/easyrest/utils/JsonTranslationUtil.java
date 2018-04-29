@@ -18,7 +18,11 @@ public class JsonTranslationUtil {
     }
 
     public static <T> T fromJson(String jsonString, Type type){
-        return GSON.fromJson(jsonString, type);
+        try {
+            return GSON.fromJson(jsonString, type);
+        } catch (Exception e){
+            return null;
+        }
     }
 
 }

@@ -17,7 +17,9 @@ public class RemoteRequestUtil {
 
     private static final Gson GSON = new GsonBuilder().create();
 
-    private static final Timeout REQUEST_TIMEOUT = new Timeout(Duration.create(10, "seconds"));
+    private static final Timeout REQUEST_TIMEOUT = new Timeout(Duration.create(60, "seconds"));
+
+    private static final Timeout REQUEST_TIMEOUT_FOR_INIT = new Timeout(Duration.create(5, "seconds"));
 
     public static Object createRemoteRequest(Method method, Object[] args){
         ServiceInfo serviceInfo = EasyRestDistributedServiceBind.getServiceInfoMap().get(method.getDeclaringClass().getName());
@@ -35,7 +37,7 @@ public class RemoteRequestUtil {
 
     static Object getServiceExchanged(String remoteActorSystemName, String remoteHost, String port, Object msg){
         try {
-            return Await.result(Patterns.ask(ActorFactory.createRemoteServiceExchangedActor(remoteActorSystemName, remoteHost, port), msg, REQUEST_TIMEOUT), REQUEST_TIMEOUT.duration());
+            return Await.result(Patterns.ask(ActorFactory.createRemoteServiceExchangedActor(remoteActorSystemName, remoteHost, port), msg, REQUEST_TIMEOUT_FOR_INIT), REQUEST_TIMEOUT_FOR_INIT.duration());
         } catch (Exception e) {
             return null;
         }

@@ -10,6 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>example-service-1-api</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>EasyRest</groupId>
+            <artifactId>Example-Distributed-Service-Model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 
 </project>
