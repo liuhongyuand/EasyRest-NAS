@@ -13,16 +13,22 @@ public class NettyLaunch extends AbstractActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder().match(EasyRest.class, (easyRest) -> {
-            if (easyRest.getNettyInit() == null) {
-                throw new ConfigurationException(String.format("%s can not be null.", NettyInit.class.getName()));
+            try {
+                if (easyRest.getNettyInit() == null) {
+                    throw new ConfigurationException(String.format("%s can not be null.", NettyInit.class.getName()));
+                }
+                EasyRestDistributedServiceBind.setInitFinished(true);
+                if (EasyRestDistributedServiceBind.isIsNeedDistributed()) {
+                    RemoteServiceExchangeActor.initServiceMap();
+                }
+                ServerBootstrap bootstrap = easyRest.getNettyInit().build(easyRest.getSystemName());
+                easyRest.getNettyInit().bindChannelFuture(bootstrap.bind(easyRest.getNettyInit().getPort()));
+                LogUtils.info(String.format("%s is running on the port %s.", easyRest.getSystemName(), easyRest.getNettyInit().getPort()));
+                easyRest.getEasyRestCallback().onStartSuccess();
+            } catch (Exception e) {
+                LogUtils.info(String.format("%s start failed.", easyRest.getSystemName()));
+                easyRest.getEasyRestCallback().onStartFailed();
             }
-            EasyRestDistributedServiceBind.setInitFinished(true);
-            if (EasyRestDistributedServiceBind.isIsNeedDistributed()) {
-                RemoteServiceExchangeActor.initServiceMap();
-            }
-            LogUtils.info(String.format("%s is running on the port %s.", easyRest.getSystemName(), easyRest.getNettyInit().getPort()));
-            ServerBootstrap bootstrap = easyRest.getNettyInit().build(easyRest.getSystemName());
-            easyRest.getNettyInit().bindChannelFuture(bootstrap.bind(easyRest.getNettyInit().getPort()));
         }).build();
     }
 

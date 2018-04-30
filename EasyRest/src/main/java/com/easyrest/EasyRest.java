@@ -9,6 +9,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class EasyRest {
 
+    private EasyRestCallback easyRestCallback;
+
     private String systemName;
 
     private NettyInit nettyInit;
@@ -33,18 +35,48 @@ public class EasyRest {
         startup(NettyInit.SystemName, new NettyInit());
     }
 
+    public void startup(EasyRestCallback easyRestCallback) {
+        startup(NettyInit.SystemName, new NettyInit(), easyRestCallback);
+    }
+
     public void startup(String systemName) {
         startup(systemName, new NettyInit());
+    }
+
+    public void startup(String systemName, EasyRestCallback easyRestCallback) {
+        startup(systemName, new NettyInit(), easyRestCallback);
     }
 
     public void startup(String systemName, int port) {
         startup(systemName, new NettyInit(port));
     }
 
+    public void startup(String systemName, int port, EasyRestCallback easyRestCallback) {
+        startup(systemName, new NettyInit(port), easyRestCallback);
+    }
+
     public void startup(String SystemName, NettyInit nettyInit) {
-        this.systemName = SystemName;
+        startup(SystemName, nettyInit, null);
+    }
+
+    public void startup(String systemName, NettyInit nettyInit, EasyRestCallback easyRestCallback){
+        this.systemName = systemName;
         this.nettyInit = nettyInit;
         NettyInit.SystemName = systemName;
+        this.easyRestCallback = easyRestCallback;
+        if (this.easyRestCallback == null) {
+            this.easyRestCallback = new EasyRestCallback() {
+                @Override
+                public void onStartSuccess() {
+
+                }
+
+                @Override
+                public void onStartFailed() {
+
+                }
+            };
+        }
         ActorFactory.createActor(AnalysisMethodActor.class).tell(this, ActorRef.noSender());
     }
 
@@ -56,4 +88,7 @@ public class EasyRest {
         return nettyInit;
     }
 
+    public EasyRestCallback getEasyRestCallback() {
+        return easyRestCallback;
+    }
 }
