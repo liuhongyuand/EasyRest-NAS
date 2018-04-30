@@ -2,11 +2,11 @@ package com.example.main.impl;
 
 import com.example.api.Service2;
 import com.example.model.People;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Controller
+@Service
 public class Service2Impl implements Service2 {
 
     @Override

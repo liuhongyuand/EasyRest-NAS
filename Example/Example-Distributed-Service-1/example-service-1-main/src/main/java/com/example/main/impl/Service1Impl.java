@@ -5,11 +5,11 @@ import com.easyrest.model.ResponseEntity;
 import com.example.api.Service1;
 import com.example.api.Service2;
 import com.example.model.People;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Controller
+@Service
 public class Service1Impl implements Service1 {
 
     @Override

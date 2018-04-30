@@ -4,12 +4,12 @@ import com.easyrest.model.ResponseEntity;
 import com.example.model.Stock;
 import com.example.rest.StockInfoRest;
 import com.google.common.collect.Lists;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Controller
-public class StockInfoRestController implements StockInfoRest {
+@Service
+public class StockInfoRestServiceImpl implements StockInfoRest {
 
     @Override
     public void addFavorite(String TENANT, String USER_ID, String CODE, long time) {

@@ -31,10 +31,10 @@ public interface StockInfoRest {
 }
 ```
 
-* The controller is the bean of spring, you can integrate with spring  
+* The Service is the bean of spring, you can integrate with spring  
 
 ```java
-@Controller
+@Service
 public class StockInfoRestController implements StockInfoRest {
 
     @Override
@@ -89,7 +89,7 @@ public class Example {
 
 * <B>@AllDefined</B> will check all parameters not be null, if any parameter is null, the framework will reject the request directly. 
 
-* <B>@Controller</B> is spring annotation, that will create bean by spring.
+* <B>@Service</B> is spring annotation, that will create bean by spring.
 
 * <B>ResponseEntity</B> is the generic response entity, you can put any thing you want in it.
 
@@ -304,7 +304,7 @@ public interface Service1 {
 * Interface Implement
 
 ```java
-@Controller
+@Service
 public class Service1Impl implements Service1 {
 
     @Override
@@ -423,7 +423,7 @@ public interface Service2 {
 * Interface Implement
 
 ```java
-@Controller
+@Service
 public class Service2Impl implements Service2 {
 
     @Override
