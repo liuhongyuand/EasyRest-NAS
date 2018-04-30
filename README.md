@@ -7,6 +7,10 @@
 
 * ##### This is the high performance RESTful framework, designed for the fast development. Easy to cluster and distributed. You can focus on your business logic.
 
+* ##### No tomcat, no web.xml, only need a jar package with 'main' function, you can get a prefect distributed system.
+
+* ##### You can don't know Netty, Akka even Spring. You can still using this framework.
+
 ## Quick start:
 
 * The rest definition
