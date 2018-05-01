@@ -15,6 +15,9 @@ public class EasyRestProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object result = RemoteRequestUtil.createRemoteRequest(method, args);
+        if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())){
+            return null;
+        }
         return new Gson().fromJson(String.valueOf(result), method.getGenericReturnType());
     }
 

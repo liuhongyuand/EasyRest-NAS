@@ -39,7 +39,11 @@ public class ControllerInvokeActor extends AbstractActor {
         })).match(RemoteInvokeObject.class, (remoteInvokeObject -> {
             try {
                 Object result = invokeMethod(remoteInvokeObject.getMethod(), remoteInvokeObject.getImplClass(), remoteInvokeObject.getArgs());
-                remoteInvokeObject.setResult(result);
+                if (remoteInvokeObject.getMethod().getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())){
+                    remoteInvokeObject.setResult(ResponseEntity.buildOkResponse());
+                } else {
+                    remoteInvokeObject.setResult(result);
+                }
                 ActorFactory.createActor(ResponseProcessActor.class).tell(remoteInvokeObject, ActorRef.noSender());
             } catch (Exception e){
                 LogUtils.error(e.getMessage(), e);

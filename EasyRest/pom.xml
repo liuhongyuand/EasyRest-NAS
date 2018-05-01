@@ -8,6 +8,12 @@
     <artifactId>EasyRest-NAS-All-In-One</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -71,6 +77,44 @@
         </dependency>
     </dependencies>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/liuhongyuand/EasyRest-NAS</url>
+        <connection>git@github.com:liuhongyuand/EasyRest-NAS.git</connection>
+        <developerConnection>liuhongyu.louie@gmail.com</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Louie</name>
+            <email>liuhongyu.louie@gmail.com</email>
+            <url>liuhongyu.louie@gmail.com</url>
+        </developer>
+    </developers>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>sonatype-nexus-snapshots</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>sonatype-nexus-staging</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -95,7 +139,7 @@
                         </goals>
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>allinone</shadedClassifierName>
+                            <shadedClassifierName>ALL</shadedClassifierName>
                             <artifactSet>
                                 <includes>
                                     <include>*:*</include>

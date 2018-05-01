@@ -26,7 +26,7 @@ public class NettyLaunch extends AbstractActor {
                 LogUtils.info(String.format("%s is running on the port %s.", easyRest.getSystemName(), easyRest.getNettyInit().getPort()));
                 easyRest.getEasyRestCallback().onStartSuccess();
             } catch (Exception e) {
-                LogUtils.info(String.format("%s start failed.", easyRest.getSystemName()));
+                LogUtils.error(e.getMessage(), e);
                 easyRest.getEasyRestCallback().onStartFailed();
             }
         }).build();
