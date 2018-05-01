@@ -31,10 +31,10 @@ public interface StockInfoRest {
 }
 ```
 
-* 使用@controller注解，将该类交给Spring生成bean并管理，该框架可以和spring无缝对接使用。  
+* 使用@Service注解，将该类交给Spring生成bean并管理，该框架可以和spring无缝对接使用。  
 
 ```java
-@Controller
+@Service
 public class StockInfoRestController implements StockInfoRest {
 
     @Override
@@ -89,7 +89,7 @@ public class Example {
 
 * <B>@AllDefined</B> 会要求该方法所有的参数在请求中都被赋予非空值，如果检测到有null，框架将会直接拒绝这个请求。可以减少用户的空值判断。
 
-* <B>@Controller</B> 这个是spring的annotation，将交给spring生成bean并管理。
+* <B>@Service</B> 这个是spring的annotation，将交给spring生成bean并管理。
 
 * <B>ResponseEntity</B> 是一个通用的返回格式，你能将所有格式的数据放进去。（你也可以不使用这个，直接返回任何你想返回的格式）
 
@@ -303,7 +303,7 @@ public interface Service1 {
 * 接口实现
 
 ```java
-@Controller
+@Service
 public class Service1Impl implements Service1 {
 
     @Override
@@ -422,7 +422,7 @@ public interface Service2 {
 * 接口实现
 
 ```java
-@Controller
+@Service
 public class Service2Impl implements Service2 {
 
     @Override
