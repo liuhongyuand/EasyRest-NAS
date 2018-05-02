@@ -1,8 +1,8 @@
 package com.example.main;
 
-import com.easyrest.EasyRest;
-import com.easyrest.actors.remote.conf.EasyRestDistributedServiceBind;
-import com.easyrest.network.NettyInit;
+import tech.dbgsoftware.easyrest.EasyRest;
+import tech.dbgsoftware.easyrest.actors.remote.conf.EasyRestDistributedServiceBind;
+import tech.dbgsoftware.easyrest.network.NettyInit;
 
 import java.io.IOException;
 

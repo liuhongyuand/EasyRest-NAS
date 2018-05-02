@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.easyrest.model.ResponseEntity;
+import tech.dbgsoftware.easyrest.model.ResponseEntity;
 import com.example.model.Stock;
 import com.example.rest.StockInfoRest;
 import com.google.common.collect.Lists;

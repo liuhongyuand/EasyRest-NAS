@@ -1,7 +1,7 @@
 package com.example.main.impl;
 
-import com.easyrest.ioc.remote.EasyRestServiceLookup;
-import com.easyrest.model.ResponseEntity;
+import tech.dbgsoftware.easyrest.ioc.remote.EasyRestServiceLookup;
+import tech.dbgsoftware.easyrest.model.ResponseEntity;
 import com.example.api.Service1;
 import com.example.api.Service2;
 import com.example.model.People;

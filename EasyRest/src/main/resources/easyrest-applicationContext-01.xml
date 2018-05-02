@@ -7,23 +7,23 @@
         http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.easyrest">
+    <context:component-scan base-package="tech.dbgsoftware.easyrest">
     </context:component-scan>
     <context:annotation-config/>
 
-    <bean name="aopRequestValidateStep" class="com.easyrest.aop.pre.AopRequestValidateStep"/>
+    <bean name="aopRequestValidateStep" class="tech.dbgsoftware.easyrest.aop.pre.AopRequestValidateStep"/>
 
-    <bean name="aopInitRequestInfoStep" class="com.easyrest.aop.pre.AopInitRequestInfoStep"/>
+    <bean name="aopInitRequestInfoStep" class="tech.dbgsoftware.easyrest.aop.pre.AopInitRequestInfoStep"/>
 
-    <bean name="aopParametersInvokeStep" class="com.easyrest.aop.pre.AopParametersInjectStep"/>
+    <bean name="aopParametersInvokeStep" class="tech.dbgsoftware.easyrest.aop.pre.AopParametersInjectStep"/>
 
-    <bean name="staticClassUtils" class="com.easyrest.ioc.utils.StaticClassUtils">
+    <bean name="staticClassUtils" class="tech.dbgsoftware.easyrest.ioc.utils.StaticClassUtils">
         <property name="parameterNameDiscoverer">
             <bean class="org.springframework.core.DefaultParameterNameDiscoverer"/>
         </property>
     </bean>
 
-    <bean name="staticAopStepUtil" class="com.easyrest.aop.StaticAopStepUtil">
+    <bean name="staticAopStepUtil" class="tech.dbgsoftware.easyrest.aop.StaticAopStepUtil">
         <property name="aopPreCommitStepList">
             <list>
                 <ref bean="aopRequestValidateStep"/>

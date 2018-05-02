@@ -1,6 +1,7 @@
 package com.example;
 
-import com.easyrest.EasyRest;
+
+import tech.dbgsoftware.easyrest.EasyRest;
 
 public class Example {
 

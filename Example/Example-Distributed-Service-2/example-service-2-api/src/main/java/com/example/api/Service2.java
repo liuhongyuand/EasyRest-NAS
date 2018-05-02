@@ -1,8 +1,8 @@
 package com.example.api;
 
 
-import com.easyrest.annotations.method.BindURL;
-import com.easyrest.annotations.method.Get;
+import tech.dbgsoftware.easyrest.annotations.method.BindURL;
+import tech.dbgsoftware.easyrest.annotations.method.Get;
 import com.example.model.People;
 
 import java.util.List;

@@ -1,9 +1,9 @@
 package com.example.api;
 
-import com.easyrest.annotations.method.BindURL;
-import com.easyrest.annotations.method.Post;
-import com.easyrest.annotations.parameter.AllDefined;
-import com.easyrest.model.ResponseEntity;
+import tech.dbgsoftware.easyrest.annotations.method.BindURL;
+import tech.dbgsoftware.easyrest.annotations.method.Post;
+import tech.dbgsoftware.easyrest.annotations.parameter.AllDefined;
+import tech.dbgsoftware.easyrest.model.ResponseEntity;
 import com.example.model.People;
 
 import java.util.List;
