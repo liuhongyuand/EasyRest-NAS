@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>EasyRest</groupId>
+    <groupId>tech.dbgsoftware.easyrest</groupId>
     <artifactId>EasyRest-NAS-All-In-One</artifactId>
     <version>0.0.1</version>
 
@@ -185,6 +185,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>ALL</shadedClassifierName>
                             <artifactSet>
