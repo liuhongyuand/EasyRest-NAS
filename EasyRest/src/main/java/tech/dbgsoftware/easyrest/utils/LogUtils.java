@@ -19,42 +19,34 @@ public class LogUtils {
     }
 
     public static void info(String string){
-        LOGGER.error(String.valueOf(new Date()));
-        LOGGER.info(string);
+        LOGGER.info(String.format("%s\r\n%s", String.valueOf(new Date()), string));
     }
 
     public static void info(Object obj){
-        LOGGER.error(String.valueOf(new Date()));
-        LOGGER.info(GSON.toJson(obj));
+        LOGGER.info(String.format("%s\r\n%s", String.valueOf(new Date()), GSON.toJson(obj)));
     }
 
     public static void debug(String string, Class aClass){
-        LOGGER.error(String.valueOf(new Date()));
-        LOGGER.debug("From " + aClass.getName() + ": " + string);
+        LOGGER.debug(String.format("%s\r\n%s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + string));
     }
 
     public static void debug(Object obj, Class aClass){
-        LOGGER.error(String.valueOf(new Date()));
-        LOGGER.debug("From " + aClass.getName() + ": " + GSON.toJson(obj));
+        LOGGER.debug(String.format("%s\r\n%s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + GSON.toJson(obj)));
     }
 
     public static void info(String string, Class aClass){
-        LOGGER.error(String.valueOf(new Date()));
-        LOGGER.info("From " + aClass.getName() + ": " + string);
+        LOGGER.info(String.format("%s\r\n%s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + string));
     }
 
     public static void info(Object obj, Class aClass){
-        LOGGER.error(String.valueOf(new Date()));
-        LOGGER.info("From " + aClass.getName() + ": " + GSON.toJson(obj));
+        LOGGER.info(String.format("%s\r\n%s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + GSON.toJson(obj)));
     }
 
     public static void error(String message, Object object){
-        LOGGER.error(String.valueOf(new Date()));
-        LOGGER.error(message, object);
+        LOGGER.error(String.format("%s\r\n%s", String.valueOf(new Date()), message), object);
     }
 
     public static void error(String message, Exception e){
-        LOGGER.error(String.valueOf(new Date()));
-        LOGGER.error(message, e);
+        LOGGER.error(String.format("%s\r\n%s", String.valueOf(new Date()), message), e);
     }
 }
