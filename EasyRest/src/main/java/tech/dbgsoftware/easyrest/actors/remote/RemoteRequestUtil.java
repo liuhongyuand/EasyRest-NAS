@@ -9,6 +9,7 @@ import tech.dbgsoftware.easyrest.actors.remote.conf.EasyRestDistributedServiceBi
 import tech.dbgsoftware.easyrest.actors.remote.model.RemoteInvokeObject;
 import tech.dbgsoftware.easyrest.actors.remote.model.ServiceInfo;
 import tech.dbgsoftware.easyrest.utils.JsonTranslationUtil;
+import tech.dbgsoftware.easyrest.utils.LogUtils;
 
 import java.lang.reflect.Method;
 
@@ -28,6 +29,7 @@ public class RemoteRequestUtil {
         try {
             return Await.result(Patterns.ask(ActorFactory.createRemoteInvokeActor(remoteActorSystemName, remoteHost, port), msg, REQUEST_TIMEOUT), REQUEST_TIMEOUT.duration());
         } catch (Exception e) {
+            LogUtils.error(e.getMessage(), e);
             return null;
         }
     }
@@ -36,6 +38,7 @@ public class RemoteRequestUtil {
         try {
             return Await.result(Patterns.ask(ActorFactory.createRemoteServiceExchangedActor(remoteActorSystemName, remoteHost, port), msg, REQUEST_TIMEOUT_FOR_INIT), REQUEST_TIMEOUT_FOR_INIT.duration());
         } catch (Exception e) {
+            LogUtils.error(e.getMessage(), e);
             return null;
         }
     }
