@@ -18,7 +18,7 @@ public class ActorFactory {
 
     private static ActorSystem ACTOR_SYSTEM;
 
-    private static final Map<Class, Props> PROPS_CACHE = new ConcurrentHashMap<>();
+    private static final Map<Class, ActorRef> ACTOR_REF_CACHE = new ConcurrentHashMap<>();
 
     private static final Lock LOCK = new ReentrantLock();
 
@@ -34,15 +34,15 @@ public class ActorFactory {
 
     public static ActorRef createActor(Class target){
         try {
-            if (!PROPS_CACHE.containsKey(target) && LOCK.tryLock(1, TimeUnit.MINUTES)){
+            if (!ACTOR_REF_CACHE.containsKey(target) && LOCK.tryLock(1, TimeUnit.MINUTES)){
                 try {
                     Props props = Props.create(target);
-                    PROPS_CACHE.putIfAbsent(target, props);
+                    ACTOR_REF_CACHE.putIfAbsent(target, ACTOR_SYSTEM.actorOf(props));
                 } finally {
                     LOCK.unlock();
                 }
             }
-            return ACTOR_SYSTEM.actorOf(PROPS_CACHE.get(target));
+            return ACTOR_REF_CACHE.get(target);
         } catch (InterruptedException e) {
             LogUtils.error(e.getMessage(), e);
             return ACTOR_SYSTEM.actorOf(Props.create(target));
@@ -51,15 +51,14 @@ public class ActorFactory {
 
     private static void createActorWithName(Class target){
         try {
-            if (!PROPS_CACHE.containsKey(target) && LOCK.tryLock(1, TimeUnit.MINUTES)){
+            if (!ACTOR_REF_CACHE.containsKey(target) && LOCK.tryLock(1, TimeUnit.MINUTES)){
                 try {
                     Props props = Props.create(target);
-                    PROPS_CACHE.putIfAbsent(target, props);
+                    ACTOR_REF_CACHE.putIfAbsent(target, ACTOR_SYSTEM.actorOf(props, target.getSimpleName()));
                 } finally {
                     LOCK.unlock();
                 }
             }
-            ACTOR_SYSTEM.actorOf(PROPS_CACHE.get(target), target.getSimpleName());
         } catch (InterruptedException e) {
             LogUtils.error(e.getMessage(), e);
         }
