@@ -20,8 +20,17 @@ public class RemoteRequestUtil {
     private static final Timeout REQUEST_TIMEOUT_FOR_INIT = new Timeout(Duration.create(5, "seconds"));
 
     public static Object createRemoteRequest(Method method, Object[] args){
+        return createRemoteRequest(method, args, null);
+    }
+
+    public static Object createRemoteRequest(Method method, Object[] args, String invokeBeanName){
         ServiceInfo serviceInfo = EasyRestDistributedServiceBind.getServiceInfoMap().get(method.getDeclaringClass().getName());
-        RemoteInvokeObject remoteInvokeObject = new RemoteInvokeObject(method, args);
+        RemoteInvokeObject remoteInvokeObject;
+        if (invokeBeanName != null) {
+            remoteInvokeObject = new RemoteInvokeObject(method, args, invokeBeanName);
+        } else {
+            remoteInvokeObject = new RemoteInvokeObject(method, args);
+        }
         return getInvoke(serviceInfo.getAkkaSystemName(), serviceInfo.getHost(), serviceInfo.getPort(), JsonTranslationUtil.toJsonString(remoteInvokeObject));
     }
 

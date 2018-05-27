@@ -11,7 +11,15 @@ public class EasyRestServiceLookup {
         if (EasyRestDistributedServiceBind.getLocalService().contains(service.getName())){
             return BeanOperationUtils.getBeansFromInterface(service);
         } else {
-            return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, EasyRestProxy.getSingleInstance());
+            return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, EasyRestProxyFactory.getSingleProxyInstance());
+        }
+    }
+
+    public static <T> T lookup(Class<T> service, String beanName){
+        if (EasyRestDistributedServiceBind.getLocalService().contains(service.getName())){
+            return BeanOperationUtils.getBeansFromInterface(service, beanName);
+        } else {
+            return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class[]{service}, EasyRestProxyFactory.getProxyInstance(beanName));
         }
     }
 

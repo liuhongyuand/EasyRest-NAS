@@ -23,12 +23,12 @@ public class ControllerInvokeActor extends AbstractActor {
                 Method method = httpEntity.getMethod();
                 Class<?> controller = httpEntity.getController();
                 if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
-                    invokeMethod(method, controller, httpEntity.getArgs());
+                    invokeMethod(method, controller, httpEntity.getArgs(), null);
                     httpEntity.setResponseEntity(ResponseEntity.buildOkResponse());
                 } else if (method.getReturnType().equals(ResponseEntity.class)) {
-                    httpEntity.setResponseEntity((ResponseEntity) invokeMethod(method, controller, httpEntity.getArgs()));
+                    httpEntity.setResponseEntity((ResponseEntity) invokeMethod(method, controller, httpEntity.getArgs(), null));
                 } else {
-                    httpEntity.setResponseEntity(ResponseEntity.buildBaseResponse(invokeMethod(method, controller, httpEntity.getArgs())));
+                    httpEntity.setResponseEntity(ResponseEntity.buildBaseResponse(invokeMethod(method, controller, httpEntity.getArgs(), null)));
                 }
                 ActorFactory.createActor(ResponseProcessActor.class).tell(httpEntity, ActorRef.noSender());
             } catch (Exception e) {
@@ -38,7 +38,7 @@ public class ControllerInvokeActor extends AbstractActor {
             }
         })).match(RemoteInvokeObject.class, (remoteInvokeObject -> {
             try {
-                Object result = invokeMethod(remoteInvokeObject.getMethod(), remoteInvokeObject.getImplClass(), remoteInvokeObject.getArgs());
+                Object result = invokeMethod(remoteInvokeObject.getMethod(), remoteInvokeObject.getImplClass(), remoteInvokeObject.getArgs(), remoteInvokeObject.getInvokeBeanName());
                 if (remoteInvokeObject.getMethod().getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
                     remoteInvokeObject.setResult(ResponseEntity.buildOkResponse());
                 } else {
@@ -52,11 +52,19 @@ public class ControllerInvokeActor extends AbstractActor {
         })).build();
     }
 
-    private Object invokeMethod(Method method, Class<?> controller, Object[] args) throws Exception {
+    private Object invokeMethod(Method method, Class<?> controller, Object[] args, String invokeBeanName) throws Exception {
         if (args.length > 0) {
-            return method.invoke(BeanOperationUtils.getBean(controller), args);
+            if (invokeBeanName == null) {
+                return method.invoke(BeanOperationUtils.getBean(controller), args);
+            } else {
+                return method.invoke(BeanOperationUtils.getBean(invokeBeanName, controller), args);
+            }
         } else {
-            return method.invoke(BeanOperationUtils.getBean(controller));
+            if (invokeBeanName == null) {
+                return method.invoke(BeanOperationUtils.getBean(controller));
+            } else {
+                return method.invoke(BeanOperationUtils.getBean(invokeBeanName, controller));
+            }
         }
     }
 

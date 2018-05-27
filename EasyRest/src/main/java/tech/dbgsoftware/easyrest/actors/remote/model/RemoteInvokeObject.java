@@ -20,10 +20,19 @@ public class RemoteInvokeObject {
 
     private Object result;
 
+    private String invokeBeanName = "null";
+
     public RemoteInvokeObject(Method method, Object[] args) {
         this.interfaceClassName = method.getDeclaringClass().getName();
         this.methodName = method.getName();
         this.args = args;
+    }
+
+    public RemoteInvokeObject(Method method, Object[] args, String invokeBeanName) {
+        this.interfaceClassName = method.getDeclaringClass().getName();
+        this.methodName = method.getName();
+        this.args = args;
+        this.invokeBeanName = invokeBeanName;
     }
 
     public String getInterfaceClassName() {
@@ -72,5 +81,9 @@ public class RemoteInvokeObject {
 
     public void setResult(Object result) {
         this.result = result;
+    }
+
+    public String getInvokeBeanName() {
+        return invokeBeanName;
     }
 }

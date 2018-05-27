@@ -1,4 +1,4 @@
-package tech.dbgsoftware.easyrest.ioc.remote;
+package tech.dbgsoftware.easyrest.ioc.remote.proxy;
 
 import tech.dbgsoftware.easyrest.actors.remote.RemoteRequestUtil;
 import tech.dbgsoftware.easyrest.utils.JsonTranslationUtil;
@@ -7,16 +7,18 @@ import tech.dbgsoftware.easyrest.utils.LogUtils;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class EasyRestProxy implements InvocationHandler {
+public class ProxyForBeanNameInvoke implements InvocationHandler {
 
-    private static final EasyRestProxy EASY_REST_PROXY = new EasyRestProxy();
+    private String beanName;
 
-    private EasyRestProxy(){}
+    public ProxyForBeanNameInvoke(String beanName) {
+        this.beanName = beanName;
+    }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         try {
-            Object result = RemoteRequestUtil.createRemoteRequest(method, args);
+            Object result = RemoteRequestUtil.createRemoteRequest(method, args, beanName);
             if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
                 return null;
             }
@@ -26,9 +28,4 @@ public class EasyRestProxy implements InvocationHandler {
             return null;
         }
     }
-
-    static EasyRestProxy getSingleInstance(){
-        return EASY_REST_PROXY;
-    }
-
 }
