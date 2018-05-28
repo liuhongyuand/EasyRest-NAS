@@ -11,14 +11,26 @@ public class ProxyForBeanNameInvoke implements InvocationHandler {
 
     private String beanName;
 
+    private long connectionMillis;
+
+    private long resultMillis;
+
     public ProxyForBeanNameInvoke(String beanName) {
         this.beanName = beanName;
+        connectionMillis = -1;
+        resultMillis = -1;
+    }
+
+    public ProxyForBeanNameInvoke(String beanName, long connectionMillis, long resultMillis) {
+        this.beanName = beanName;
+        this.connectionMillis = connectionMillis;
+        this.resultMillis = resultMillis;
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         try {
-            Object result = RemoteRequestUtil.createRemoteRequest(method, args, beanName);
+            Object result = RemoteRequestUtil.createRemoteRequest(method, args, beanName, connectionMillis, resultMillis);
             if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
                 return null;
             }

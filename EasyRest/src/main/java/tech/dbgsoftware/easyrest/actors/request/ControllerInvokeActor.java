@@ -54,13 +54,13 @@ public class ControllerInvokeActor extends AbstractActor {
 
     private Object invokeMethod(Method method, Class<?> controller, Object[] args, String invokeBeanName) throws Exception {
         if (args.length > 0) {
-            if (invokeBeanName == null) {
+            if (invokeBeanName == null || invokeBeanName.equalsIgnoreCase("null")) {
                 return method.invoke(BeanOperationUtils.getBean(controller), args);
             } else {
                 return method.invoke(BeanOperationUtils.getBean(invokeBeanName, controller), args);
             }
         } else {
-            if (invokeBeanName == null) {
+            if (invokeBeanName == null || invokeBeanName.equalsIgnoreCase("null")) {
                 return method.invoke(BeanOperationUtils.getBean(controller));
             } else {
                 return method.invoke(BeanOperationUtils.getBean(invokeBeanName, controller));

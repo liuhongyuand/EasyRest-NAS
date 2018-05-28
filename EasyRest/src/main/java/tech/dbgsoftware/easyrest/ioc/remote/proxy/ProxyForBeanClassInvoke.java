@@ -9,10 +9,24 @@ import java.lang.reflect.Method;
 
 public class ProxyForBeanClassInvoke implements InvocationHandler {
 
+    private long connectionMillis;
+
+    private long resultMillis;
+
+    public ProxyForBeanClassInvoke() {
+        connectionMillis = -1;
+        resultMillis = -1;
+    }
+
+    public ProxyForBeanClassInvoke(long connectionMillis, long resultMillis) {
+        this.connectionMillis = connectionMillis;
+        this.resultMillis = resultMillis;
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         try {
-            Object result = RemoteRequestUtil.createRemoteRequest(method, args);
+            Object result = RemoteRequestUtil.createRemoteRequest(method, args, connectionMillis, resultMillis);
             if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
                 return null;
             }
