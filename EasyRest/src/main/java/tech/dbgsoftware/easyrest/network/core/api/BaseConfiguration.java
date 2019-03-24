@@ -6,6 +6,8 @@ public interface BaseConfiguration {
 
     int getPort();
 
+    String getHost();
+
     int getIoExecutors();
 
     String getSystemName();

@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.services;
 
 import tech.dbgsoftware.easyrest.model.ResponseEntity;
 import com.example.model.Stock;

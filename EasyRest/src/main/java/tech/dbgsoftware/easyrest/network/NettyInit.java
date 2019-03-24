@@ -1,8 +1,5 @@
 package tech.dbgsoftware.easyrest.network;
 
-import tech.dbgsoftware.easyrest.network.conf.ChannelOptionBuilder;
-import tech.dbgsoftware.easyrest.network.core.api.BaseConfiguration;
-import tech.dbgsoftware.easyrest.network.core.pipeline.in.RequestProcessHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
@@ -34,6 +31,7 @@ import java.util.function.Function;
 public class NettyInit implements BaseConfiguration {
 
     private int port = 8080;
+    private String host = "*";
     private int ioExecutors = Runtime.getRuntime().availableProcessors() * 2;
     public static String SystemName = "EasyRest";
     private int maxContentLength = 20480;
@@ -49,7 +47,12 @@ public class NettyInit implements BaseConfiguration {
     public NettyInit(){}
 
     public NettyInit(int port){
+        this("*", port);
+    }
+
+    public NettyInit(String host, int port) {
         setPort(port);
+        setHost(host);
     }
 
     public ServerBootstrap build(){
@@ -81,6 +84,15 @@ public class NettyInit implements BaseConfiguration {
             this.port = port;
         }
         return this;
+    }
+
+    @Override
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public NettyInit setIoExecutors(int ioExecutors){

@@ -7,7 +7,7 @@ public class Example {
 
     public static void main(String[] args) {
         EasyRest easyRest = new EasyRest("classpath:MyExampleApplicationContext.xml");
-        easyRest.startup("EasyRestServer");
+        easyRest.startup("EasyRestServer", 8080);
     }
 
 }

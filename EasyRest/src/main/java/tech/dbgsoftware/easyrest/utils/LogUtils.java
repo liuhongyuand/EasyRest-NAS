@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.dbgsoftware.easyrest.exception.PageNotFoundException;
 
 import java.util.Date;
 
@@ -42,11 +43,23 @@ public class LogUtils {
         LOGGER.info(String.format("%s %s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + GSON.toJson(obj)));
     }
 
+    public static void error(String message){
+        LOGGER.error(String.format("%s %s", String.valueOf(new Date()), message));
+    }
+
     public static void error(String message, Object object){
-        LOGGER.error(String.format("%s %s", String.valueOf(new Date()), message), object);
+        if (object == null) {
+            error(message);
+        } else {
+            LOGGER.error(String.format("%s %s", String.valueOf(new Date()), message), object);
+        }
     }
 
     public static void error(String message, Exception e){
-        LOGGER.error(String.format("%s %s", String.valueOf(new Date()), message), e);
+        if (e instanceof PageNotFoundException) {
+            error(message);
+        } else {
+            LOGGER.error(String.format("%s %s", String.valueOf(new Date()), message), e);
+        }
     }
 }
