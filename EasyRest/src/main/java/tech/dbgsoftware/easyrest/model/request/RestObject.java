@@ -83,11 +83,21 @@ public class RestObject {
             MethodInfo methodInfo = cm.getMethodInfo();
             CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
             LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
-            int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+            boolean afterThis = false;
+            List<String> paraName = new ArrayList<>(method.getParameters().length);
+            for (int i = 0; i < attr.tableLength(); i++) {
+                String name = attr.variableName(i);
+                if (!afterThis && name.equalsIgnoreCase("this")){
+                    afterThis = true;
+                    continue;
+                }
+                if (afterThis && paraName.size() < method.getParameters().length) {
+                    paraName.add(name);
+                }
+            }
             for (int i = 0; i < method.getParameters().length; i++) {
-                String parameterName = attr.variableName(i + pos);
                 Type type = method.getParameters()[i].getParameterizedType();
-                parameterTypeMap.put(parameterName, type);
+                parameterTypeMap.put(paraName.get(i), type);
             }
         } catch (Exception e){
             e.printStackTrace();
