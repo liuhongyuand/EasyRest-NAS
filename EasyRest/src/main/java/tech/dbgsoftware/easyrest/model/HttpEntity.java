@@ -74,6 +74,10 @@ public class HttpEntity {
         errorMap.put(e.getMessage(), e.getClass().getSimpleName());
     }
 
+    public void addError(Throwable e){
+        errorMap.put(e.getMessage(), e.getClass().getSimpleName());
+    }
+
     public RestObject getRestObject() {
         return restObject;
     }
