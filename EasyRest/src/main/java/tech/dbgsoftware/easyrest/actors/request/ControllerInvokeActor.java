@@ -7,6 +7,7 @@ import tech.dbgsoftware.easyrest.actors.ExceptionHandleActor;
 import tech.dbgsoftware.easyrest.actors.Signal;
 import tech.dbgsoftware.easyrest.actors.remote.model.RemoteInvokeObject;
 import tech.dbgsoftware.easyrest.actors.response.ResponseProcessActor;
+import tech.dbgsoftware.easyrest.annotations.method.SkipCustomerInject;
 import tech.dbgsoftware.easyrest.aop.customer.CustomInjection;
 import tech.dbgsoftware.easyrest.ioc.utils.BeanOperationUtils;
 import tech.dbgsoftware.easyrest.model.HttpEntity;
@@ -74,7 +75,7 @@ public class ControllerInvokeActor extends AbstractActor {
     }
 
     private void invokePerCheck(Object classz, HttpEntity httpEntity) throws Exception {
-        if (httpEntity != null && classz instanceof CustomInjection) {
+        if (!httpEntity.getMethod().isAnnotationPresent(SkipCustomerInject.class) && httpEntity != null && classz instanceof CustomInjection) {
             CustomInjection.class.getMethods()[0].invoke(classz, httpEntity);
         }
     }
