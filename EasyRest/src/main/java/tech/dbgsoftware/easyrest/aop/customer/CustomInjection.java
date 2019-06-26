@@ -4,6 +4,6 @@ import tech.dbgsoftware.easyrest.model.HttpEntity;
 
 public interface CustomInjection {
 
-    HttpEntity preCheck(HttpEntity httpEntity);
+    HttpEntity preCheck(HttpEntity httpEntity) throws Exception;
 
 }
