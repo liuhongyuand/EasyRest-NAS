@@ -1,5 +1,6 @@
 package tech.dbgsoftware.easyrest.network.core.api;
 
+import java.util.List;
 import java.util.Map;
 
 public interface BaseConfiguration {
@@ -14,6 +15,8 @@ public interface BaseConfiguration {
 
     int getMaxContentLength();
 
-    Map<String, Object> getCustomerProperties();
+    Map<String, Object> getProperties();
+
+    List<String> getAccessControlAllowHeaders();
 
 }

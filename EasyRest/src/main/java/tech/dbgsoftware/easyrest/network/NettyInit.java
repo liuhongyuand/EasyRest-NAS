@@ -23,9 +23,7 @@ import tech.dbgsoftware.easyrest.network.core.pipeline.in.RequestProcessHandler;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public class NettyInit implements BaseConfiguration {
@@ -40,7 +38,8 @@ public class NettyInit implements BaseConfiguration {
     private SSLContext sslContext;
     private CustomizeChannel customizeChannel = new CustomizeChannel();
     private ChannelOptionBuilder channelOptionBuilder = new ChannelOptionBuilder().buildWithDefaultOptions();
-    private Map<String, Object> customerProperties = new HashMap<>();
+    private Map<String, Object> properties = new HashMap<>();
+    private List<String> AccessControlAllowHeaders = Arrays.asList("DNT","X-Mx-ReqToken","Keep-Alive","User-Agent","X-Requested-With","If-Modified-Since","Cache-Control","Content-Type","Authorization");
     private ChannelFuture channelFuture;
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyInit.class);
 
@@ -127,7 +126,7 @@ public class NettyInit implements BaseConfiguration {
     }
 
     public NettyInit addConfigurations(String key, Object value){
-        customerProperties.put(key, value);
+        properties.put(key, value);
         return this;
     }
 
@@ -152,8 +151,13 @@ public class NettyInit implements BaseConfiguration {
     }
 
     @Override
-    public Map<String, Object> getCustomerProperties() {
-        return customerProperties;
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    @Override
+    public List<String> getAccessControlAllowHeaders() {
+        return AccessControlAllowHeaders;
     }
 
     public int getPort() {
