@@ -39,7 +39,7 @@ public class NettyInit implements BaseConfiguration {
     private CustomizeChannel customizeChannel = new CustomizeChannel();
     private ChannelOptionBuilder channelOptionBuilder = new ChannelOptionBuilder().buildWithDefaultOptions();
     private Map<String, Object> properties = new HashMap<>();
-    private List<String> AccessControlAllowHeaders = Arrays.asList("DNT","X-Mx-ReqToken","Keep-Alive","User-Agent","X-Requested-With","If-Modified-Since","Cache-Control","Content-Type","Authorization");
+    private List<String> AccessControlAllowHeaders = new ArrayList<>();
     private ChannelFuture channelFuture;
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyInit.class);
 
@@ -67,6 +67,7 @@ public class NettyInit implements BaseConfiguration {
             bossEventLoopGroup = new NioEventLoopGroup(ioExecutors);
             workerEventLoopGroup = new NioEventLoopGroup(ioExecutors);
         }
+        AccessControlAllowHeaders.addAll(Arrays.asList("DNT","X-Mx-ReqToken","Keep-Alive","User-Agent","X-Requested-With","If-Modified-Since","Cache-Control","Content-Type","Authorization"));
         return initServerBootstrap();
     }
 
