@@ -10,7 +10,8 @@ public class OutputActor extends AbstractActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder().match(HttpEntity.class, (httpEntity -> {
-            if (httpEntity.getRestObject().getMethod().getReturnType().equals(ResponseEntity.class) ||
+            if (httpEntity.isOptionsCheck() ||
+                    httpEntity.getRestObject().getMethod().getReturnType().equals(ResponseEntity.class) ||
                     httpEntity.getRestObject().getMethod().getReturnType().getSimpleName().equalsIgnoreCase(Void.class.getSimpleName())) {
                 httpEntity.getResponse().buildResponse(httpEntity.getResponseEntity());
             } else {

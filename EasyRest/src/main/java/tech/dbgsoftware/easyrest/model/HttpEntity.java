@@ -14,6 +14,7 @@ public class HttpEntity {
     private Request request;
     private Response response;
     private Class controller;
+    private Boolean isOptionsCheck = false;
     private ChannelHandlerContext channelHandlerContext;
     private ResponseEntity responseEntity;
     private RestObject restObject;
@@ -24,6 +25,14 @@ public class HttpEntity {
         this.request = request;
         this.response = response;
         this.channelHandlerContext = channelHandlerContext;
+    }
+
+    public Boolean isOptionsCheck() {
+        return isOptionsCheck;
+    }
+
+    public void setOptionsCheck(Boolean optionsCheck) {
+        isOptionsCheck = optionsCheck;
     }
 
     public void setMethod(Method method) {

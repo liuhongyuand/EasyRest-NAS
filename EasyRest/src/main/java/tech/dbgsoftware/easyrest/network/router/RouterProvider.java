@@ -74,7 +74,7 @@ public class RouterProvider {
             url.insert(0, "/");
         }
         if (!bindUrl.endsWith("/") && !methodUrl.startsWith("/")){
-            url.insert(bindUrl.length(), "/");
+            url.insert(url.length(), "/");
         }
         url.append(methodUrl);
         RouterProvider.registerUrl(url.toString(), httpMethod, restObject);

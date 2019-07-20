@@ -29,8 +29,12 @@ public class AopRequestValidateStep implements AopPreCommitStep {
             throw new PageNotFoundException(String.format(NOT_FOUND, url));
         } else {
             if (!restObject.getHttpMethodList().contains(entity.getRequest().getRequestHttpMethod().toLowerCase())){
-                entity.getResponse().getRealResponse().setStatus(HttpResponseStatus.METHOD_NOT_ALLOWED);
-                throw new MethodNotAllowedException(String.format(NOT_ALLOWED, entity.getRequest().getRequestHttpMethod()));
+                if (entity.getRequest().getRequestHttpMethod().toLowerCase().equalsIgnoreCase("options")) {
+                    entity.setOptionsCheck(true);
+                } else {
+                    entity.getResponse().getRealResponse().setStatus(HttpResponseStatus.METHOD_NOT_ALLOWED);
+                    throw new MethodNotAllowedException(String.format(NOT_ALLOWED, entity.getRequest().getRequestHttpMethod()));
+                }
             }
         }
         entity.setRestObject(restObject);
