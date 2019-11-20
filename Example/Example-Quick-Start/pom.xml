@@ -10,6 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Example-Quick-Start</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>tech.dbgsoftware.easyrest</groupId>
+            <artifactId>EasyRest-NAS-All-In-One</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 
 </project>

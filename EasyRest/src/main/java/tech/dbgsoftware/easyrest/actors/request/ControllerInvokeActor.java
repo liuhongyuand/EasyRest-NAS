@@ -8,7 +8,9 @@ import tech.dbgsoftware.easyrest.actors.Signal;
 import tech.dbgsoftware.easyrest.actors.remote.model.RemoteInvokeObject;
 import tech.dbgsoftware.easyrest.actors.response.ResponseProcessActor;
 import tech.dbgsoftware.easyrest.annotations.method.SkipCustomerInject;
+import tech.dbgsoftware.easyrest.annotations.method.SkipCustomerResponse;
 import tech.dbgsoftware.easyrest.aop.customer.CustomInjection;
+import tech.dbgsoftware.easyrest.aop.customer.CustomResponse;
 import tech.dbgsoftware.easyrest.ioc.utils.BeanOperationUtils;
 import tech.dbgsoftware.easyrest.model.HttpEntity;
 import tech.dbgsoftware.easyrest.model.ResponseEntity;
@@ -57,19 +59,23 @@ public class ControllerInvokeActor extends AbstractActor {
     private Object invokeMethod(Method method, Class<?> controller, Object[] args, String invokeBeanName, HttpEntity httpEntity) throws Exception {
         if (args.length > 0) {
             if (invokeBeanName == null || invokeBeanName.equalsIgnoreCase("null")) {
-                invokePerCheck(BeanOperationUtils.getBean(controller), httpEntity);
-                return method.invoke(BeanOperationUtils.getBean(controller), args);
+                Object object = BeanOperationUtils.getBean(controller);
+                invokePerCheck(object, httpEntity);
+                return invokeCustomResponse(object, httpEntity, method.invoke(object, args));
             } else {
-                invokePerCheck(BeanOperationUtils.getBean(invokeBeanName, controller), httpEntity);
-                return method.invoke(BeanOperationUtils.getBean(invokeBeanName, controller), args);
+                Object object = BeanOperationUtils.getBean(invokeBeanName, controller);
+                invokePerCheck(object, httpEntity);
+                return invokeCustomResponse(object, httpEntity, method.invoke(object, args));
             }
         } else {
             if (invokeBeanName == null || invokeBeanName.equalsIgnoreCase("null")) {
-                invokePerCheck(BeanOperationUtils.getBean(controller), httpEntity);
-                return method.invoke(BeanOperationUtils.getBean(controller));
+                Object object = BeanOperationUtils.getBean(controller);
+                invokePerCheck(object, httpEntity);
+                return invokeCustomResponse(object, httpEntity, method.invoke(object));
             } else {
-                invokePerCheck(BeanOperationUtils.getBean(invokeBeanName, controller), httpEntity);
-                return method.invoke(BeanOperationUtils.getBean(invokeBeanName, controller));
+                Object object = BeanOperationUtils.getBean(invokeBeanName, controller);
+                invokePerCheck(object, httpEntity);
+                return invokeCustomResponse(object, httpEntity, method.invoke(object));
             }
         }
     }
@@ -78,6 +84,13 @@ public class ControllerInvokeActor extends AbstractActor {
         if (!httpEntity.getMethod().isAnnotationPresent(SkipCustomerInject.class) && httpEntity != null && classz instanceof CustomInjection) {
             CustomInjection.class.getMethods()[0].invoke(classz, httpEntity);
         }
+    }
+
+    private Object invokeCustomResponse(Object classz, HttpEntity httpEntity, Object response) throws Exception {
+        if (!httpEntity.getMethod().isAnnotationPresent(SkipCustomerResponse.class) && httpEntity != null && classz instanceof CustomResponse) {
+            return CustomResponse.class.getMethods()[0].invoke(classz, httpEntity, response);
+        }
+        return response;
     }
 
 }

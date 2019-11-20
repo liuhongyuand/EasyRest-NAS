@@ -14,14 +14,6 @@
         <module>Example-Distributed-Service-Model</module>
         <module>Example-Quick-Start</module>
     </modules>
-    <dependencies>
-        <dependency>
-            <groupId>EasyRest</groupId>
-            <artifactId>EasyRest-NAS-All-In-One</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
