@@ -36,6 +36,12 @@ public class Response {
         return this;
     }
 
+    public Response buildStringResponse(String responseString){
+        this.response = newStringResponse(responseString);
+        this.response.setStatus(status);
+        return this;
+    }
+
     public void setStatus(HttpResponseStatus status) {
         this.status = status;
     }
@@ -47,6 +53,15 @@ public class Response {
     private FullHttpResponse newResponse(Object responseEntity){
         FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(GSON.toJson(responseEntity).getBytes()));
         response.headers().set(CONTENT_TYPE, "application/json");
+        response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
+        response.headers().set(CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+        responseHeaders.forEach((k, v) -> response.headers().set(k, v));
+        return response;
+    }
+
+    private FullHttpResponse newStringResponse(String responseString){
+        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(responseString.getBytes()));
+        response.headers().set(CONTENT_TYPE, "text/plain");
         response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
         response.headers().set(CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         responseHeaders.forEach((k, v) -> response.headers().set(k, v));

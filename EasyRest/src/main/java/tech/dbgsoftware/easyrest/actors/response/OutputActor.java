@@ -14,6 +14,8 @@ public class OutputActor extends AbstractActor {
                     httpEntity.getRestObject().getMethod().getReturnType().equals(ResponseEntity.class) ||
                     httpEntity.getRestObject().getMethod().getReturnType().getSimpleName().equalsIgnoreCase(Void.class.getSimpleName())) {
                 httpEntity.getResponse().buildResponse(httpEntity.getResponseEntity());
+            } else if (httpEntity.getRestObject().getMethod().getReturnType().equals(String.class)) {
+                httpEntity.getResponse().buildStringResponse(String.valueOf(httpEntity.getResponseEntity().getData()));
             } else {
                 httpEntity.getResponse().buildResponse(httpEntity.getResponseEntity().getData());
             }

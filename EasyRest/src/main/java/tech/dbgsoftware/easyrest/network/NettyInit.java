@@ -97,7 +97,7 @@ public class NettyInit implements BaseConfiguration {
 
     public NettyInit setIoExecutors(int ioExecutors){
         if (ioExecutors < 1) {
-            this.ioExecutors = Runtime.getRuntime().availableProcessors() * 2;
+            this.ioExecutors = Runtime.getRuntime().availableProcessors() * 2 + 1;
         } else {
             this.ioExecutors = ioExecutors;
         }
