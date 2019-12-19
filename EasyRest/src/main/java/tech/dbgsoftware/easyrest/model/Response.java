@@ -1,6 +1,7 @@
 package tech.dbgsoftware.easyrest.model;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -16,7 +17,7 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 public class Response {
 
-    private final static Gson GSON = new Gson();
+    private final static Gson GSON = new GsonBuilder().serializeSpecialFloatingPointValues().create();
     private FullHttpResponse response;
     private HttpResponseStatus status = HttpResponseStatus.OK;
     private Map<String, String> responseHeaders = new HashMap<>();
