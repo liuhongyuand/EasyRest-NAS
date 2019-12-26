@@ -36,7 +36,6 @@ public class RequestProcessHandler extends SimpleChannelInboundHandler<FullHttpR
         if (ctx.channel().isActive()){
             ctx.close();
         }
-        super.exceptionCaught(ctx, cause);
     }
 
     private HttpEntity createNewRequestEntity(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest){

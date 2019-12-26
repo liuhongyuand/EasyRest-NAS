@@ -6,6 +6,7 @@ import tech.dbgsoftware.easyrest.actors.ActorFactory;
 import tech.dbgsoftware.easyrest.actors.ExceptionHandleActor;
 import tech.dbgsoftware.easyrest.actors.response.OutputActor;
 import tech.dbgsoftware.easyrest.aop.StaticAopStepUtil;
+import tech.dbgsoftware.easyrest.exception.PageNotFoundException;
 import tech.dbgsoftware.easyrest.model.HttpEntity;
 import tech.dbgsoftware.easyrest.utils.LogUtils;
 
@@ -20,8 +21,12 @@ public class RequestProcessActor extends AbstractActor {
                     try {
                         httpEntityTemp[0] = step.executeStep(httpEntityTemp[0]);
                     } catch (Exception e) {
-                        LogUtils.error(e.getMessage(), e);
                         httpEntityTemp[0].addError(e);
+                        if (e instanceof PageNotFoundException) {
+                            httpEntity.getChannelHandlerContext().close();
+                            return;
+                        }
+                        LogUtils.error(e.getMessage(), e);
                     }
                 }
             });

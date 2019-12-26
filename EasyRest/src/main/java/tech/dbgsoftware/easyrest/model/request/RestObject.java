@@ -79,7 +79,14 @@ public class RestObject {
             ClassPool pool = ClassPool.getDefault();
             pool.insertClassPath(new ClassClassPath(controller));
             CtClass cc = pool.get(controller.getName());
-            CtMethod cm = cc.getDeclaredMethod(method.getName());
+            CtClass[] ctClasses = new CtClass[method.getParameterCount()];
+            int index = 0;
+            for (Class aClass : method.getParameterTypes()) {
+                ClassPool poolPara = ClassPool.getDefault();
+                poolPara.insertClassPath(new ClassClassPath(aClass));
+                ctClasses[index++] = poolPara.get(aClass.getName());
+            }
+            CtMethod cm = ctClasses.length == 0 ? cc.getDeclaredMethod(method.getName()) : cc.getDeclaredMethod(method.getName(), ctClasses);
             MethodInfo methodInfo = cm.getMethodInfo();
             CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
             LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);

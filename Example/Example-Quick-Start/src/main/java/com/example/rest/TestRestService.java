@@ -1,10 +1,7 @@
 package com.example.rest;
 
 import com.example.InfoMation;
-import tech.dbgsoftware.easyrest.annotations.method.BindURL;
-import tech.dbgsoftware.easyrest.annotations.method.Get;
-import tech.dbgsoftware.easyrest.annotations.method.Post;
-import tech.dbgsoftware.easyrest.annotations.method.SkipCustomerInject;
+import tech.dbgsoftware.easyrest.annotations.method.*;
 import tech.dbgsoftware.easyrest.annotations.parameter.AllDefined;
 import tech.dbgsoftware.easyrest.aop.customer.CustomInjection;
 import tech.dbgsoftware.easyrest.aop.customer.CustomResponse;
@@ -18,7 +15,20 @@ public interface TestRestService extends CustomInjection, CustomResponse {
 
     @Get
     @SkipCustomerInject
+    @SkipCustomerResponse
     String ping();
+
+    @Get()
+    @AllDefined
+    @SkipCustomerInject
+    @SkipCustomerResponse
+    String ping(String a);
+
+    @Get()
+    @AllDefined
+    @SkipCustomerInject
+    @SkipCustomerResponse
+    String ping(String a, String b);
 
     @Post
     @AllDefined

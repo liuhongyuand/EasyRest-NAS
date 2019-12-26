@@ -2,6 +2,7 @@ package com.example.services;
 
 import com.example.rest.TestRestService;
 import org.springframework.stereotype.Service;
+import tech.dbgsoftware.easyrest.model.ResponseEntity;
 
 @Service
 public class TestServiceImpl implements TestRestService {
@@ -9,6 +10,16 @@ public class TestServiceImpl implements TestRestService {
     @Override
     public String ping() {
         return ("Pong");
+    }
+
+    @Override
+    public String ping(String a) {
+        return a;
+    }
+
+    @Override
+    public String ping(String a, String b) {
+        return a + ", " + b;
     }
 
     @Override
