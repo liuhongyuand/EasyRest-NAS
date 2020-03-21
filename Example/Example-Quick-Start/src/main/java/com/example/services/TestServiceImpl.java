@@ -23,6 +23,11 @@ public class TestServiceImpl implements TestRestService {
     }
 
     @Override
+    public ResponseEntity testApi(String a, String b) {
+        return ResponseEntity.buildOkResponse(a + "-" + b);
+    }
+
+    @Override
     public String test(String a, String b) {
         String c;
         String d;

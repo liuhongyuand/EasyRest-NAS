@@ -18,17 +18,23 @@ public interface TestRestService extends CustomInjection, CustomResponse {
     @SkipCustomerResponse
     String ping();
 
-    @Get()
+    @Get
     @AllDefined
     @SkipCustomerInject
     @SkipCustomerResponse
     String ping(String a);
 
-    @Get()
+    @Get
     @AllDefined
     @SkipCustomerInject
     @SkipCustomerResponse
     String ping(String a, String b);
+
+    @Get
+    @AllDefined
+    @SkipCustomerInject
+    @SkipCustomerResponse
+    ResponseEntity testApi(String a, String b);
 
     @Post
     @AllDefined
