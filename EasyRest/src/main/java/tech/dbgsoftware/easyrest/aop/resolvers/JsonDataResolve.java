@@ -37,6 +37,12 @@ public class JsonDataResolve {
                     args[index[0]] = httpEntity.getRestObject().getUriValues().get(name);
                 } else {
                     args[index[0]] = JsonTranslationUtil.fromJson(httpEntity.getRequest().getJsonData(), type);
+                    if (args[index[0]] == null) {
+                        Map data = JsonTranslationUtil.fromJson(httpEntity.getRequest().getJsonData(), Map.class);
+                        if (data != null && data.containsKey(name)) {
+                            args[index[0]] = JsonTranslationUtil.fromJson(data.get(name).toString(), type);
+                        }
+                    }
                 }
                 index[0]++;
             });

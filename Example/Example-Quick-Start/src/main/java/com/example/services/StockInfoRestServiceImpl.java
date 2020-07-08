@@ -25,4 +25,9 @@ public class StockInfoRestServiceImpl implements StockInfoRest {
     public List<Stock> getStockList(String USER_ID) {
         return Lists.newArrayList(new Stock(100000, "stock1"), new Stock(100001, "stock2"), new Stock(100002, "stock3"));
     }
+
+    @Override
+    public ResponseEntity getA(String a) {
+        return ResponseEntity.buildOkResponse(a);
+    }
 }

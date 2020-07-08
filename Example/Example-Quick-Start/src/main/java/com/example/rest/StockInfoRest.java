@@ -22,4 +22,8 @@ public interface StockInfoRest {
     @Get("/personal/{USER_ID}/favorite/list")
     List<Stock> getStockList(String USER_ID);
 
+    @Post
+    @AllDefined
+    ResponseEntity getA(String a);
+
 }
