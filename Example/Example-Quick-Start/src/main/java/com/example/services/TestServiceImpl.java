@@ -8,18 +8,13 @@ import tech.dbgsoftware.easyrest.model.ResponseEntity;
 public class TestServiceImpl implements TestRestService {
 
     @Override
-    public String ping() {
-        return ("Pong");
-    }
-
-    @Override
-    public String ping(String a) {
-        return a;
-    }
-
-    @Override
-    public String ping(String a, String b) {
-        return a + ", " + b;
+    public void ping() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("11");
     }
 
     @Override

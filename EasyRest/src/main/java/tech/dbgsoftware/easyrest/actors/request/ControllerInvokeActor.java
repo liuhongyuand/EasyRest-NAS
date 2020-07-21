@@ -17,8 +17,12 @@ import tech.dbgsoftware.easyrest.model.ResponseEntity;
 import tech.dbgsoftware.easyrest.utils.LogUtils;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ControllerInvokeActor extends AbstractActor {
+
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
 
     @Override
     public Receive createReceive() {
@@ -27,7 +31,13 @@ public class ControllerInvokeActor extends AbstractActor {
                 Method method = httpEntity.getMethod();
                 Class<?> controller = httpEntity.getController();
                 if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
-                    invokeMethod(method, controller, httpEntity.getArgs(), null, httpEntity);
+                    EXECUTOR_SERVICE.execute(() -> {
+                        try {
+                            invokeMethod(method, controller, httpEntity.getArgs(), null, httpEntity);
+                        } catch (Exception e) {
+                            LogUtils.error(e.getMessage(), e);
+                        }
+                    });
                     httpEntity.setResponseEntity(ResponseEntity.buildOkResponse());
                 } else if (method.getReturnType().equals(ResponseEntity.class)) {
                     httpEntity.setResponseEntity((ResponseEntity) invokeMethod(method, controller, httpEntity.getArgs(), null, httpEntity));
