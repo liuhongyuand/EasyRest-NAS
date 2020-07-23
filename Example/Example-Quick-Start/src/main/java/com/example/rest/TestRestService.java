@@ -24,8 +24,10 @@ public interface TestRestService extends CustomInjection, CustomResponse {
     @SkipCustomerResponse
     ResponseEntity testApi(String a, String b);
 
-    @Post
+    @Get
     @AllDefined
+    @SkipCustomerInject
+    @SkipCustomerResponse
     String test(String a, String b);
 
     @Override

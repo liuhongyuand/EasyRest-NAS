@@ -24,10 +24,13 @@ public class ControllerInvokeActor extends AbstractActor {
 
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
 
+    private static final ExecutorService OPERATION_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 20);
+
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(HttpEntity.class, (httpEntity -> {
+        return receiveBuilder().match(HttpEntity.class, (httpEntity -> OPERATION_SERVICE.execute(() -> {
             try {
+                LogUtils.info(httpEntity.getRequest().getRequestUri());
                 Method method = httpEntity.getMethod();
                 Class<?> controller = httpEntity.getController();
                 if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
@@ -50,7 +53,7 @@ public class ControllerInvokeActor extends AbstractActor {
                 httpEntity.addError(e.getCause());
                 ActorFactory.createActor(ExceptionHandleActor.class).tell(httpEntity, ActorRef.noSender());
             }
-        })).match(RemoteInvokeObject.class, (remoteInvokeObject -> {
+        }))).match(RemoteInvokeObject.class, (remoteInvokeObject -> {
             try {
                 Object result = invokeMethod(remoteInvokeObject.getMethod(), remoteInvokeObject.getImplClass(), remoteInvokeObject.getArgs(), remoteInvokeObject.getInvokeBeanName(), null);
                 if (remoteInvokeObject.getMethod().getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
