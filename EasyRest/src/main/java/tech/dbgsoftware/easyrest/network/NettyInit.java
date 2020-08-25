@@ -251,7 +251,7 @@ public class NettyInit implements BaseConfiguration {
                     }
                     return handler;
                 };
-                pipeline.addLast(Epoll.isAvailable() ? new EpollEventLoopGroup(ioExecutors) : new NioEventLoopGroup(ioExecutors), handlerPredicate.apply(isSharableMapping));
+                pipeline.addLast(Epoll.isAvailable() ? new EpollEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2) : new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2), handlerPredicate.apply(isSharableMapping));
             });
         }
     }
