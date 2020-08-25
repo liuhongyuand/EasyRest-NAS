@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 
 public class ControllerInvokeActor extends AbstractActor {
 
-    private static final ExecutorService OPERATION_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 20);
+    private static final ExecutorService OPERATION_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
 
     @Override
     public Receive createReceive() {

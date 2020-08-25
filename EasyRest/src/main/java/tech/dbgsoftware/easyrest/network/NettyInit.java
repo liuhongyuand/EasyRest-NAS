@@ -61,10 +61,10 @@ public class NettyInit implements BaseConfiguration {
     public ServerBootstrap build(String _systemName){
         SystemName = _systemName;
         if (Epoll.isAvailable()){
-            bossEventLoopGroup = new EpollEventLoopGroup(ioExecutors);
+            bossEventLoopGroup = new EpollEventLoopGroup((ioExecutors / 2) + 1);
             workerEventLoopGroup = new EpollEventLoopGroup(ioExecutors);
         } else {
-            bossEventLoopGroup = new NioEventLoopGroup(ioExecutors);
+            bossEventLoopGroup = new NioEventLoopGroup((ioExecutors / 2) + 1);
             workerEventLoopGroup = new NioEventLoopGroup(ioExecutors);
         }
         AccessControlAllowHeaders.addAll(Arrays.asList("DNT","X-Mx-ReqToken","Keep-Alive","User-Agent","X-Requested-With","If-Modified-Since","Cache-Control","Content-Type","Authorization"));
@@ -251,7 +251,7 @@ public class NettyInit implements BaseConfiguration {
                     }
                     return handler;
                 };
-                pipeline.addLast(Epoll.isAvailable() ? new EpollEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2) : new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2), handlerPredicate.apply(isSharableMapping));
+                pipeline.addLast(workerEventLoopGroup, handlerPredicate.apply(isSharableMapping));
             });
         }
     }
