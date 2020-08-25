@@ -4,7 +4,7 @@ public class ThreadStackUtils {
 
     public static String getStackInfo() {
         StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < Math.min(6, Thread.currentThread().getStackTrace().length); i++) {
+        for (int i = 0; i < Math.min(18, Thread.currentThread().getStackTrace().length); i++) {
             String className = Thread.currentThread().getStackTrace()[i].getClassName();
             String methodName = Thread.currentThread().getStackTrace()[i].getMethodName();
             String line = String.valueOf(Thread.currentThread().getStackTrace()[i].getLineNumber());
