@@ -30,24 +30,28 @@ public class Request {
     private Map<String, String> parameterFromURL = new HashMap<>();
 
     public Request(FullHttpRequest fullHttpRequest) {
-        requestHttpMethod = fullHttpRequest.method().name();
-        requestUri = UrlFormat.getUrl(fullHttpRequest.uri(), parameterFromURL);
-        fullHttpRequest.headers().forEach((header) -> headers.putIfAbsent(header.getKey(), header.getValue()));
-        HttpPostRequestDecoder postRequestDecoder = new HttpPostRequestDecoder(fullHttpRequest);
-        originByte = ByteBufUtils.readAll(fullHttpRequest.content());
-        jsonData = new String(originByte, 0, originByte.length);
-        if (postRequestDecoder.isMultipart()){
-            postRequestDecoder.getBodyHttpDatas().forEach((interfaceHttpData -> {
-                isMultipart = true;
-                Attribute attribute = (Attribute) interfaceHttpData;
-                try {
-                    String key = interfaceHttpData.getName();
-                    String value = attribute.getValue();
-                    formData.put(key, value);
-                } catch (IOException e) {
-                    LogUtils.error(e.getMessage(), e);
-                }
-            }));
+        try {
+            requestHttpMethod = fullHttpRequest.method().name();
+            requestUri = UrlFormat.getUrl(fullHttpRequest.uri(), parameterFromURL);
+            fullHttpRequest.headers().forEach((header) -> headers.putIfAbsent(header.getKey(), header.getValue()));
+            HttpPostRequestDecoder postRequestDecoder = new HttpPostRequestDecoder(fullHttpRequest);
+            originByte = ByteBufUtils.readAll(fullHttpRequest.content());
+            jsonData = new String(originByte, 0, originByte.length);
+            if (postRequestDecoder.isMultipart()) {
+                postRequestDecoder.getBodyHttpDatas().forEach((interfaceHttpData -> {
+                    isMultipart = true;
+                    Attribute attribute = (Attribute) interfaceHttpData;
+                    try {
+                        String key = interfaceHttpData.getName();
+                        String value = attribute.getValue();
+                        formData.put(key, value);
+                    } catch (IOException e) {
+                        LogUtils.error(e.getMessage(), e);
+                    }
+                }));
+            }
+        } finally {
+            fullHttpRequest.release();
         }
     }
 

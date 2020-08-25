@@ -3,7 +3,7 @@ package tech.dbgsoftware.easyrest.network.core.pipeline.in;
 import akka.actor.ActorRef;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
 import tech.dbgsoftware.easyrest.actors.ActorFactory;
 import tech.dbgsoftware.easyrest.actors.request.RequestProcessActor;
@@ -17,7 +17,7 @@ import tech.dbgsoftware.easyrest.network.core.api.BaseConfiguration;
  * Created by liuhongyu.louie on 2016/9/17.
  */
 @ChannelHandler.Sharable
-public class RequestProcessHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class RequestProcessHandler extends ChannelInboundHandlerAdapter {
 
     private BaseConfiguration baseConfiguration;
 
@@ -26,8 +26,8 @@ public class RequestProcessHandler extends SimpleChannelInboundHandler<FullHttpR
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest fullHttpRequest) throws Exception {
-        HttpEntity httpEntity = createNewRequestEntity(channelHandlerContext, fullHttpRequest);
+    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
+        HttpEntity httpEntity = createNewRequestEntity(channelHandlerContext, (FullHttpRequest) msg);
         ActorFactory.createActor(RequestProcessActor.class).tell(httpEntity, ActorRef.noSender());
     }
 

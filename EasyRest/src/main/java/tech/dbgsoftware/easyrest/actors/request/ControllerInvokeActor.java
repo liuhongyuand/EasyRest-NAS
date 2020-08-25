@@ -22,19 +22,17 @@ import java.util.concurrent.Executors;
 
 public class ControllerInvokeActor extends AbstractActor {
 
-    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
-
     private static final ExecutorService OPERATION_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 20);
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(HttpEntity.class, (httpEntity -> OPERATION_SERVICE.execute(() -> {
+        return receiveBuilder().match(HttpEntity.class, (httpEntity -> {
             try {
                 LogUtils.info(httpEntity.getRequest().getRequestUri());
                 Method method = httpEntity.getMethod();
                 Class<?> controller = httpEntity.getController();
                 if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
-                    EXECUTOR_SERVICE.execute(() -> {
+                    OPERATION_SERVICE.execute(() -> {
                         try {
                             invokeMethod(method, controller, httpEntity.getArgs(), null, httpEntity);
                         } catch (Exception e) {
@@ -42,18 +40,36 @@ public class ControllerInvokeActor extends AbstractActor {
                         }
                     });
                     httpEntity.setResponseEntity(ResponseEntity.buildOkResponse());
+                    ActorFactory.createActor(ResponseProcessActor.class).tell(httpEntity, ActorRef.noSender());
                 } else if (method.getReturnType().equals(ResponseEntity.class)) {
-                    httpEntity.setResponseEntity((ResponseEntity) invokeMethod(method, controller, httpEntity.getArgs(), null, httpEntity));
+                    OPERATION_SERVICE.execute(() -> {
+                       try {
+                           httpEntity.setResponseEntity((ResponseEntity) invokeMethod(method, controller, httpEntity.getArgs(), null, httpEntity));
+                           ActorFactory.createActor(ResponseProcessActor.class).tell(httpEntity, ActorRef.noSender());
+                       } catch (Exception e) {
+                           LogUtils.error(e.getMessage(), e);
+                           httpEntity.addError(e.getCause());
+                           ActorFactory.createActor(ExceptionHandleActor.class).tell(httpEntity, ActorRef.noSender());
+                       }
+                    });
                 } else {
-                    httpEntity.setResponseEntity(ResponseEntity.buildBaseResponse(invokeMethod(method, controller, httpEntity.getArgs(), null, httpEntity)));
+                    OPERATION_SERVICE.execute(() -> {
+                        try {
+                            httpEntity.setResponseEntity(ResponseEntity.buildBaseResponse(invokeMethod(method, controller, httpEntity.getArgs(), null, httpEntity)));
+                            ActorFactory.createActor(ResponseProcessActor.class).tell(httpEntity, ActorRef.noSender());
+                        } catch (Exception e) {
+                            LogUtils.error(e.getMessage(), e);
+                            httpEntity.addError(e.getCause());
+                            ActorFactory.createActor(ExceptionHandleActor.class).tell(httpEntity, ActorRef.noSender());
+                        }
+                    });
                 }
-                ActorFactory.createActor(ResponseProcessActor.class).tell(httpEntity, ActorRef.noSender());
             } catch (Exception e) {
                 LogUtils.error(e.getMessage(), e);
                 httpEntity.addError(e.getCause());
                 ActorFactory.createActor(ExceptionHandleActor.class).tell(httpEntity, ActorRef.noSender());
             }
-        }))).match(RemoteInvokeObject.class, (remoteInvokeObject -> {
+        })).match(RemoteInvokeObject.class, (remoteInvokeObject -> {
             try {
                 Object result = invokeMethod(remoteInvokeObject.getMethod(), remoteInvokeObject.getImplClass(), remoteInvokeObject.getArgs(), remoteInvokeObject.getInvokeBeanName(), null);
                 if (remoteInvokeObject.getMethod().getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
