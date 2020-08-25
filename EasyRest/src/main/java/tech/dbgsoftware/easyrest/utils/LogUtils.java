@@ -71,7 +71,7 @@ public class LogUtils {
     }
 
     public static void error(String message){
-        String error = String.format("%s %s", String.valueOf(new Date()), message);
+        String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
         LOGGER.error(error);
         if (ERROR_FUNCTION != null) {
             EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(error));
@@ -80,12 +80,12 @@ public class LogUtils {
 
     public static void error(String message, Object object){
         if (object == null) {
-            error(message);
+            error(message + "\r\n" + ThreadStackUtils.getStackInfo());
             if (ERROR_FUNCTION != null) {
-                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(message));
+                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(message + "\r\n" + ThreadStackUtils.getStackInfo()));
             }
         } else {
-            String error = String.format("%s %s", String.valueOf(new Date()), message);
+            String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
             LOGGER.error(error, object);
             if (ERROR_FUNCTION != null) {
                 EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(error));
@@ -95,12 +95,12 @@ public class LogUtils {
 
     public static void error(String message, Exception e){
         if (e instanceof PageNotFoundException) {
-            error(message);
+            error(message + "\r\n" + ThreadStackUtils.getStackInfo());
             if (ERROR_FUNCTION != null) {
-                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(message));
+                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(message + "\r\n" + ThreadStackUtils.getStackInfo()));
             }
         } else {
-            String error = String.format("%s %s", String.valueOf(new Date()), message);
+            String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
             LOGGER.error(error, e);
             if (ERROR_FUNCTION != null) {
                 EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(error));
