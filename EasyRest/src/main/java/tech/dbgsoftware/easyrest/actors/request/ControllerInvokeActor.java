@@ -28,7 +28,6 @@ public class ControllerInvokeActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder().match(HttpEntity.class, (httpEntity -> {
             try {
-                LogUtils.info(httpEntity.getRequest().getRequestUri());
                 Method method = httpEntity.getMethod();
                 Class<?> controller = httpEntity.getController();
                 if (method.getReturnType().getName().equalsIgnoreCase(Void.class.getSimpleName())) {
