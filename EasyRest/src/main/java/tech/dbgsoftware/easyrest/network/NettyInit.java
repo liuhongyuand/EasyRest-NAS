@@ -243,7 +243,7 @@ public class NettyInit implements BaseConfiguration {
             userHandlers.forEach((name, handler) -> {
                 Function<Map<String, Boolean>, ChannelHandler> handlerPredicate = newHandler -> {
                     try {
-                        if (!newHandler.get(name)) {
+                        if (newHandler != null && handler != null && !newHandler.get(name)) {
                             return handler.getClass().newInstance();
                         }
                     } catch (InstantiationException | IllegalAccessException e) {
@@ -251,7 +251,10 @@ public class NettyInit implements BaseConfiguration {
                     }
                     return handler;
                 };
-                pipeline.addLast(workerEventLoopGroup, handlerPredicate.apply(isSharableMapping));
+                ChannelHandler channelHandler = handlerPredicate.apply(isSharableMapping);
+                if (channelHandler != null) {
+                    pipeline.addLast(workerEventLoopGroup, channelHandler);
+                }
             });
         }
     }

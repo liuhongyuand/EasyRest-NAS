@@ -50,6 +50,8 @@ public class Request {
                     }
                 }));
             }
+        } catch (Exception e) {
+            LogUtils.error("Ref count = " + fullHttpRequest.refCnt() + " " + e.getMessage());
         } finally {
             fullHttpRequest.release();
         }
