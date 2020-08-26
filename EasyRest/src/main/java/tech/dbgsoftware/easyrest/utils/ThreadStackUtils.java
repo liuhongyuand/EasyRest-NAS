@@ -3,7 +3,7 @@ package tech.dbgsoftware.easyrest.utils;
 public class ThreadStackUtils {
 
     public static String getStackInfo() {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
         for (int i = 0; i < Math.min(18, Thread.currentThread().getStackTrace().length); i++) {
             String className = Thread.currentThread().getStackTrace()[i].getClassName();
             String methodName = Thread.currentThread().getStackTrace()[i].getMethodName();
