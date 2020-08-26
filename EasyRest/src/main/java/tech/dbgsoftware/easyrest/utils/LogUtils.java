@@ -42,7 +42,11 @@ public class LogUtils {
         String log = String.format("%s %s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + string);
         LOGGER.info(log);
         if (INFO_FUNCTION != null) {
-            EXECUTOR_SERVICE.execute(() -> INFO_FUNCTION.apply(log));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append('[');
+            stringBuilder.append(Thread.currentThread().getName());
+            stringBuilder.append("] ");
+            EXECUTOR_SERVICE.execute(() -> INFO_FUNCTION.apply(stringBuilder.append(log).toString()));
         }
     }
 
@@ -50,7 +54,11 @@ public class LogUtils {
         String log = String.format("%s %s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + GSON.toJson(obj));
         LOGGER.info(log);
         if (INFO_FUNCTION != null) {
-            EXECUTOR_SERVICE.execute(() -> INFO_FUNCTION.apply(log));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append('[');
+            stringBuilder.append(Thread.currentThread().getName());
+            stringBuilder.append("] ");
+            EXECUTOR_SERVICE.execute(() -> INFO_FUNCTION.apply(stringBuilder.append(log).toString()));
         }
     }
 
@@ -58,7 +66,11 @@ public class LogUtils {
         String log = String.format("%s %s", String.valueOf(new Date()), string);
         LOGGER.info(log);
         if (INFO_FUNCTION != null) {
-            EXECUTOR_SERVICE.execute(() -> INFO_FUNCTION.apply(log));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append('[');
+            stringBuilder.append(Thread.currentThread().getName());
+            stringBuilder.append("] ");
+            EXECUTOR_SERVICE.execute(() -> INFO_FUNCTION.apply(stringBuilder.append(log).toString()));
         }
     }
 
@@ -66,7 +78,11 @@ public class LogUtils {
         String log = String.format("%s %s", String.valueOf(new Date()), GSON.toJson(obj));
         LOGGER.info(log);
         if (INFO_FUNCTION != null) {
-            EXECUTOR_SERVICE.execute(() -> INFO_FUNCTION.apply(log));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append('[');
+            stringBuilder.append(Thread.currentThread().getName());
+            stringBuilder.append("] ");
+            EXECUTOR_SERVICE.execute(() -> INFO_FUNCTION.apply(stringBuilder.append(log).toString()));
         }
     }
 
@@ -74,7 +90,11 @@ public class LogUtils {
         String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
         LOGGER.error(error);
         if (ERROR_FUNCTION != null) {
-            EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(error));
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append('[');
+            stringBuilder.append(Thread.currentThread().getName());
+            stringBuilder.append("] ");
+            EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(error).toString()));
         }
     }
 
@@ -82,13 +102,21 @@ public class LogUtils {
         if (object == null) {
             error(message + "\r\n" + ThreadStackUtils.getStackInfo());
             if (ERROR_FUNCTION != null) {
-                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(message + "\r\n" + ThreadStackUtils.getStackInfo()));
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append('[');
+                stringBuilder.append(Thread.currentThread().getName());
+                stringBuilder.append("] ");
+                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(message).append("\r\n").append(ThreadStackUtils.getStackInfo()).toString()));
             }
         } else {
             String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
             LOGGER.error(error, object);
             if (ERROR_FUNCTION != null) {
-                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(error));
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append('[');
+                stringBuilder.append(Thread.currentThread().getName());
+                stringBuilder.append("] ");
+                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(error).toString()));
             }
         }
     }
@@ -97,13 +125,21 @@ public class LogUtils {
         if (e instanceof PageNotFoundException) {
             error(message + "\r\n" + ThreadStackUtils.getStackInfo());
             if (ERROR_FUNCTION != null) {
-                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(message + "\r\n" + ThreadStackUtils.getStackInfo()));
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append('[');
+                stringBuilder.append(Thread.currentThread().getName());
+                stringBuilder.append("] ");
+                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(message).append("\r\n").append(ThreadStackUtils.getStackInfo()).toString()));
             }
         } else {
             String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
             LOGGER.error(error, e);
             if (ERROR_FUNCTION != null) {
-                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(error));
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append('[');
+                stringBuilder.append(Thread.currentThread().getName());
+                stringBuilder.append("] ");
+                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(message).toString()));
             }
         }
     }
