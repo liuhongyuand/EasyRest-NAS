@@ -123,16 +123,16 @@ public class LogUtils {
 
     public static void error(String message, Exception e){
         if (e instanceof PageNotFoundException) {
-            error(message + "\r\n" + ThreadStackUtils.getStackInfo());
+            error(message + "\r\n" + ThreadStackUtils.getStackInfo(e));
             if (ERROR_FUNCTION != null) {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append('[');
                 stringBuilder.append(Thread.currentThread().getName());
                 stringBuilder.append("] ");
-                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(message).append("\r\n").append(ThreadStackUtils.getStackInfo()).toString()));
+                EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(message).append("\r\n").append(ThreadStackUtils.getStackInfo(e)).toString()));
             }
         } else {
-            String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
+            String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo(e));
             LOGGER.error(error, e);
             if (ERROR_FUNCTION != null) {
                 StringBuilder stringBuilder = new StringBuilder();
