@@ -28,6 +28,7 @@ public class JsonTranslationUtil {
         try {
             return GSON.fromJson(jsonString, type);
         } catch (Exception e){
+            LogUtils.error(jsonString);
             LogUtils.error(e.getMessage(), e);
             return null;
         }
