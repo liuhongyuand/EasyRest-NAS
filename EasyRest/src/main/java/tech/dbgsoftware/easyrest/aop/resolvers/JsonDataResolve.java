@@ -36,7 +36,7 @@ public class JsonDataResolve {
                 if (httpEntity.getRestObject().getUriValues().containsKey(name)){
                     args[index[0]] = httpEntity.getRestObject().getUriValues().get(name);
                 } else {
-                    args[index[0]] = JsonTranslationUtil.fromJson(httpEntity.getRequest().getJsonData(), type);
+                    args[index[0]] = isBasicType(type) ? null : JsonTranslationUtil.fromJson(httpEntity.getRequest().getJsonData(), type);
                     if (args[index[0]] == null) {
                         Map data = JsonTranslationUtil.fromJson(httpEntity.getRequest().getJsonData(), Map.class);
                         if (data != null && data.containsKey(name)) {
@@ -48,6 +48,20 @@ public class JsonDataResolve {
             });
         }
         return args;
+    }
+
+    private static boolean isBasicType(Type type) {
+        if (type.getTypeName().equals(String.class.getName())){
+            return true;
+        } else if (type.getTypeName().equals(Integer.class.getName()) || type.getTypeName().equals("int")){
+            return true;
+        } else if (type.getTypeName().equals(Double.class.getName()) || type.getTypeName().equals("double")){
+            return true;
+        } else if (type.getTypeName().equals(Long.class.getName()) || type.getTypeName().equals("long")){
+            return true;
+        } else if (type.getTypeName().equals(Float.class.getName()) || type.getTypeName().equals("float")){
+            return true;
+        } else return type.getTypeName().equals(Short.class.getName()) || type.getTypeName().equals("short");
     }
 
 }

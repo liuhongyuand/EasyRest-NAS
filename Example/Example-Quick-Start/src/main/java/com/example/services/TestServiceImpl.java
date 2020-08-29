@@ -9,23 +9,18 @@ import tech.dbgsoftware.easyrest.utils.LogUtils;
 public class TestServiceImpl implements TestRestService {
 
     @Override
-    public void ping() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("11");
+    public void ping(String a) {
+        System.out.println(a);
+    }
+
+    @Override
+    public void postPing(String a) {
+        System.out.println(a);
     }
 
     @Override
     public ResponseEntity testApi(String a, String b) {
-        try {
-            LogUtils.info(a + " " + b);
-            Thread.sleep(1000 * 10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        LogUtils.info(a + " " + b);
         return ResponseEntity.buildOkResponse(a + "-" + b);
     }
 
