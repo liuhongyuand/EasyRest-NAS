@@ -31,15 +31,15 @@ public class LogUtils {
     }
 
     public static void debug(String string, Class aClass){
-        LOGGER.debug(String.format("%s %s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + string));
+        LOGGER.debug(String.format("%s %s", new Date(), "From " + aClass.getName() + ": " + string));
     }
 
     public static void debug(Object obj, Class aClass){
-        LOGGER.debug(String.format("%s %s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + GSON.toJson(obj)));
+        LOGGER.debug(String.format("%s %s", new Date(), "From " + aClass.getName() + ": " + GSON.toJson(obj)));
     }
 
     public static void info(String string, Class aClass){
-        String log = String.format("%s %s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + string);
+        String log = String.format("%s %s", new Date(), "From " + aClass.getName() + ": " + string);
         LOGGER.info(log);
         if (INFO_FUNCTION != null) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -51,7 +51,7 @@ public class LogUtils {
     }
 
     public static void info(Object obj, Class aClass){
-        String log = String.format("%s %s", String.valueOf(new Date()), "From " + aClass.getName() + ": " + GSON.toJson(obj));
+        String log = String.format("%s %s", new Date(), "From " + aClass.getName() + ": " + GSON.toJson(obj));
         LOGGER.info(log);
         if (INFO_FUNCTION != null) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -63,7 +63,7 @@ public class LogUtils {
     }
 
     public static void info(String string){
-        String log = String.format("%s %s", String.valueOf(new Date()), string);
+        String log = String.format("%s %s", new Date(), string);
         LOGGER.info(log);
         if (INFO_FUNCTION != null) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -75,7 +75,7 @@ public class LogUtils {
     }
 
     public static void info(Object obj){
-        String log = String.format("%s %s", String.valueOf(new Date()), GSON.toJson(obj));
+        String log = String.format("%s %s", new Date(), GSON.toJson(obj));
         LOGGER.info(log);
         if (INFO_FUNCTION != null) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -87,7 +87,7 @@ public class LogUtils {
     }
 
     public static void error(String message){
-        String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
+        String error = String.format("%s %s", new Date(), message + "\r\n" + ThreadStackUtils.getStackInfo());
         LOGGER.error(error);
         if (ERROR_FUNCTION != null) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -109,7 +109,7 @@ public class LogUtils {
                 EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(message).append("\r\n").append(ThreadStackUtils.getStackInfo()).toString()));
             }
         } else {
-            String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo());
+            String error = String.format("%s %s", new Date(), message + "\r\n" + ThreadStackUtils.getStackInfo());
             LOGGER.error(error, object);
             if (ERROR_FUNCTION != null) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -132,7 +132,7 @@ public class LogUtils {
                 EXECUTOR_SERVICE.execute(() -> ERROR_FUNCTION.apply(stringBuilder.append(message).append("\r\n").append(ThreadStackUtils.getStackInfo(e)).toString()));
             }
         } else {
-            String error = String.format("%s %s", String.valueOf(new Date()), message + "\r\n" + ThreadStackUtils.getStackInfo(e));
+            String error = String.format("%s %s", new Date(), message + "\r\n" + ThreadStackUtils.getStackInfo(e));
             LOGGER.error(error, e);
             if (ERROR_FUNCTION != null) {
                 StringBuilder stringBuilder = new StringBuilder();

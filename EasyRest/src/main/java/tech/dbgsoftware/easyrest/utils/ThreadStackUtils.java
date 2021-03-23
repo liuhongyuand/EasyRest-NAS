@@ -4,22 +4,22 @@ public class ThreadStackUtils {
 
     public static String getStackInfo() {
         StringBuilder stringBuffer = new StringBuilder();
-        for (int i = Math.min(3, Thread.currentThread().getStackTrace().length); i < Math.min(18, Thread.currentThread().getStackTrace().length); i++) {
+        for (int i = 0; i < Math.min(18, Thread.currentThread().getStackTrace().length); i++) {
             String className = Thread.currentThread().getStackTrace()[i].getClassName();
             String methodName = Thread.currentThread().getStackTrace()[i].getMethodName();
             String line = String.valueOf(Thread.currentThread().getStackTrace()[i].getLineNumber());
-            stringBuffer.append(className).append(":").append(methodName).append(":").append(line).append("\r\n");
+            stringBuffer.append(className).append(":").append(methodName).append(":").append(line).append(",");
         }
         return stringBuffer.toString();
     }
 
     public static String getStackInfo(Exception e) {
         StringBuilder stringBuffer = new StringBuilder();
-        for (int i = Math.min(3, e.getStackTrace().length); i < Math.min(18, e.getStackTrace().length); i++) {
+        for (int i = 0; i < Math.min(18, e.getStackTrace().length); i++) {
             String className = e.getStackTrace()[i].getClassName();
             String methodName = e.getStackTrace()[i].getMethodName();
             String line = String.valueOf(e.getStackTrace()[i].getLineNumber());
-            stringBuffer.append(className).append(":").append(methodName).append(":").append(line).append("\r\n");
+            stringBuffer.append(className).append(":").append(methodName).append(":").append(line).append(",");
         }
         return stringBuffer.toString();
     }
