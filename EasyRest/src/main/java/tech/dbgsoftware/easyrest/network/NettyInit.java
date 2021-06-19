@@ -243,7 +243,7 @@ public class NettyInit implements BaseConfiguration {
             userHandlers.forEach((name, handler) -> {
                 Function<Map<String, Boolean>, ChannelHandler> handlerPredicate = newHandler -> {
                     try {
-                        if (newHandler != null && handler != null && !newHandler.get(name)) {
+                        if (newHandler != null && handler != null && newHandler.containsKey(name) && !newHandler.get(name)) {
                             return handler.getClass().newInstance();
                         }
                     } catch (InstantiationException | IllegalAccessException e) {
