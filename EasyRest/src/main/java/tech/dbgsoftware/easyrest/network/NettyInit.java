@@ -246,7 +246,7 @@ public class NettyInit implements BaseConfiguration {
                         if (newHandler != null && handler != null && newHandler.containsKey(name) && !newHandler.get(name)) {
                             return handler.getClass().newInstance();
                         }
-                    } catch (InstantiationException | IllegalAccessException e) {
+                    } catch (Exception e) {
                         LOGGER.error(e.getMessage(), e);
                     }
                     return handler;
